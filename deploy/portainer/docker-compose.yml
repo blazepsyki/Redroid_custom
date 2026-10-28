@@ -1,0 +1,48 @@
+services:
+  redroid:
+    # 로컬에서 빌드해 remote_load.py로 가져온 이미지입니다. 레지스트리에 없으므로 받지 않습니다.
+    # Google SDK에서 추출한 번역 바이너리가 들어 있어 공개 레지스트리에 올리지 않습니다.
+    image: "${REDROID_IMAGE:-redroid-custom:15.0.0-64only-261028}"
+    pull_policy: never
+    container_name: redroid-custom
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+    # Binder·GPU·UHID 장치와 mknod가 필요해 privileged로 실행합니다.
+    # 신뢰할 수 없는 APK는 설치하지 않습니다.
+    privileged: true
+
+    # 메모리 8GiB는 상한이며 예약이 아닙니다.
+    cpus: 1.5
+    mem_limit: 8g
+
+    ports:
+      - "${REDROID_ADB_PORT:-5555}:5555"
+
+    volumes:
+      # Android /data (계정, 앱, 설정). 이 폴더를 지우면 모든 앱 데이터가 사라집니다.
+      - "/data/redroid-custom/data:/data"
+      # Intel GPU host 렌더링
+      - "/dev/dri:/dev/dri"
+
+    # 이미지 진입점(/init androidboot.hardware=redroid) 뒤에 붙는 부팅 인자입니다.
+    command:
+      - "androidboot.use_memfd=1"
+      - "androidboot.redroid_gpu_mode=host"
+      - "androidboot.redroid_gpu_node=/dev/dri/renderD128"
+      - "androidboot.redroid_width=${REDROID_WIDTH:-720}"
+      - "androidboot.redroid_height=${REDROID_HEIGHT:-1280}"
+      - "androidboot.redroid_dpi=${REDROID_DPI:-240}"
+      - "androidboot.redroid_fps=${REDROID_FPS:-30}"
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    labels:
+      # 로컬 이미지이므로 Watchtower가 갱신하지 않게 합니다.
+      - "com.centurylinklabs.watchtower.enable=false"
+
+    network_mode: bridge

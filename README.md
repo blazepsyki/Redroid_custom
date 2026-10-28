@@ -153,6 +153,8 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 | `arm64` | `redroid-custom-arm64-test` | 5561 | host(`/dev/dri/renderD128`), 메모리 상한 8GiB |
 | `guest`·`gpu`·`fixed` | `redroid-custom-test`·`-gpu-test`·`-fixed-test` | 5558·5559·5560 | 이전 단계 시험용 |
 
+실행 호스트의 파일은 다른 서비스와 같이 `/data/redroid-custom` 아래에 둡니다. 패키지는 `packages/<package_id>/`, Android `/data`는 `test-data/<실행 ID>/`, 잠금 파일은 `locks/`입니다. 처음 한 번은 관리자가 이 폴더를 만들고 실행 사용자에게 소유권을 줍니다(예: `sudo install -d -o $USER -g $USER /data/redroid-custom`). 폴더가 없거나 실행 사용자 소유가 아니면 `remote_prepare.py`가 중단합니다.
+
 1. `scripts/remote_preflight.py`의 결과(`build-logs/remote-preflight.json`)로 실행 호스트와 시험 경로를 확인합니다.
 2. `dist/transfer-test/redroid.docker.tar`에 패키지의 `redroid.oci.tar`를 복사합니다. 그다음 `scripts/prepare_remote_transfer.py --package-state build-logs/custom-package-state.json --directory dist/transfer-test`로 제어 파일 묶음과 해시를 만듭니다.
 3. 전송 기록의 값으로 원격 호스트에서 `remote_prepare.py`(시험 폴더 준비)를 실행합니다. archive를 `scp`한 뒤 `remote_load.py`(해시 확인과 `docker load`)를 실행합니다. 두 스크립트는 `ssh test-host python3 - <인자> < scripts/<이름>.py`로 실행합니다. `test-host`는 사용자 환경에 정의한 SSH 별칭으로 바꿉니다.
