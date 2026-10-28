@@ -34,7 +34,7 @@ scrcpy가 UHID 키보드를 만들면 커널에 `/sys/class/input/eventN`이 생
 
 `remote_keyboard.py`는 이 서비스가 없는 이전 이미지에서만 쓰는 수동 대안으로 남깁니다.
 
-## 실행 시험 (2026-10-28, NAS `redroid-custom-arm64-test`)
+## 실행 시험 (2026-10-28, Host `redroid-custom-arm64-test`)
 
 scrcpy와 같은 이름·HID descriptor를 쓰는 시험용 UHID 키보드(`tests/uhid/uhid_type.c`)를 컨테이너 안에서 실행했습니다. 연락처 편집 화면의 입력란에 입력한 뒤 저장하지 않고 닫았습니다.
 
@@ -48,14 +48,14 @@ scrcpy와 같은 이름·HID descriptor를 쓰는 시험용 UHID 키보드(`test
 
 ### 이미지 반영 후 재시험
 
-`dist/a15-r36-custom-20261028T063039161002Z`(image `sha256:d5add9db624f…`)로 `redroid-custom-arm64-test`를 다시 만들었습니다. `/data`, GPU, 포트 5561, 자원 상한, 부팅 인자는 기존 컨테이너와 같게 두었습니다. 기존 설정은 `build-logs/remote-uhid/container-before.json`에 있습니다.
+`redroid-custom-arm64-test`를 두 번 다시 만들었습니다. 처음은 `dist/a15-r36-custom-20261028T063039161002Z`(image `sha256:d5add9db624f…`), 최종은 `/dev/uhid` 권한 수정을 넣은 `dist/a15-r36-custom-20261028T064911699377Z`(image `sha256:41e805c981c8…`)입니다. `/data`, GPU, 포트 5561, 자원 상한, 부팅 인자는 기존 컨테이너와 같게 두었습니다. 기존 설정은 `build-logs/remote-uhid/container-before.json`에 있습니다.
 
 - `init.svc.custom_uhid_inputd=running`, init이 시작한 서비스가 노드를 생성·제거
 - Google 계정, 설치 앱, Fcitx5 단축키 설정 유지
 - 컨테이너를 새로 만든 뒤 실제 scrcpy 연결에서 `/dev/uhid` 열기가 `EACCES`로 실패했습니다. 이전 컨테이너에서는 수동으로 바꾼 권한이 남아 있었습니다. 실행 중인 컨테이너의 노드만 `uhid:uhid 0660`으로 바로 고쳤고, 이후 서비스가 시작할 때 맞추도록 수정했습니다.
 - 재시작 직후 Fcitx5는 영문 상태로 시작합니다. `Ctrl+Space` 또는 오른쪽 Alt로 한글로 전환한 뒤 입력합니다.
 
-처음에는 수동으로 실행한 prototype 바이너리로, 이후 AOSP로 빌드한 `custom_uhid_inputd`로 같은 생성·제거를 확인했습니다. prototype은 `/dev/kmsg`에 기록해 NAS 호스트 커널 로그에 20줄이 남았습니다. AOSP 빌드판은 logcat만 사용합니다.
+처음에는 수동으로 실행한 prototype 바이너리로, 이후 AOSP로 빌드한 `custom_uhid_inputd`로 같은 생성·제거를 확인했습니다. prototype은 `/dev/kmsg`에 기록해 호스트 커널 로그에 20줄이 남았습니다. AOSP 빌드판은 logcat만 사용합니다.
 
 ## Fcitx5 한글 입력 설정
 
@@ -74,27 +74,3 @@ scrcpy와 같은 이름·HID descriptor를 쓰는 시험용 UHID 키보드(`test
 ```
 
 이 설정은 앱 데이터이므로 새 `/data`에서는 Fcitx5 설정 화면(전역 설정 → 단축키 → 입력기 전환)에서 같은 키를 추가합니다. Windows에서 scrcpy를 쓸 때는 Windows IME 상태와 관계없이 UHID가 물리 키를 보냅니다. 한/영 키가 오른쪽 Alt가 아니라 별도 키로 처리되는 키보드에서는 `Ctrl+Space`를 사용합니다.
-
-## 이전 KeliBoard의 영문 키 전달과 한글 조합 제한
-
-UHID는 물리 키 이벤트를 Android에 전달합니다. Windows IME에서 조합한 한글 문자열을 그대로 전송하는 기능이 아닙니다. Android 쪽 입력기와 물리 키보드 레이아웃도 설정해야 합니다([scrcpy 공식 키보드 문서](https://github.com/Genymobile/scrcpy/blob/master/doc/keyboard.md)).
-
-제공된 KeliBoard 4.0.1의 한글 화면 키보드와 물리 키보드 처리는 별개입니다. 해당 버전 소스의 `ProductionFlags.IS_HARDWARE_KEYBOARD_SUPPORTED`는 `false`입니다. 원본 APK의 DEX에서도 `LatinIME.onKeyDown`이 Hangul 처리 경로를 호출하지 않고 상위 `InputMethodService.onKeyDown`으로 넘기는 것을 확인했습니다.
-
-- 참조 소스: [KeliBoard v4.0.1의 ProductionFlags](https://github.com/GPLaider/KeliBoard/blob/v4.0.1/app/src/main/java/helium314/keyboard/latin/define/ProductionFlags.kt)
-- 확인한 소스 commit: `7dc6d076025ece10a71823bc15ab4109bf59da47`
-- APK와 인증서 해시: `config/apps-lock.json`
-
-따라서 이전 KeliBoard 원본 APK에서는 UHID 키 전달을 복구해도 물리 키보드 한글 조합까지 해결됐다고 판정할 수 없습니다. 이 제한은 Android 빌드 설정이나 `--prefer-text`만으로 켤 수 없습니다. 원본 APK의 서명·바이트는 변경하지 않았습니다.
-
-이전 KeliBoard를 계속 사용하는 경우의 대안은 다음과 같습니다.
-
-- KeliBoard에서 한국어 레이아웃을 선택하고 화면 키보드로 입력합니다. 물리 키보드 연결 중 화면 키보드를 표시하는 옵션은 Android 키보드 설정에서 켭니다.
-- 컴퓨터에서 조합한 한글을 복사한 뒤 scrcpy의 붙여넣기를 사용합니다. [공식 clipboard 문서](https://github.com/Genymobile/scrcpy/blob/master/doc/control.md#copy-paste)를 참고합니다.
-- 물리 키보드의 직접 한글 조합에는 이를 지원하는 입력기 또는 별도로 빌드·서명한 KeliBoard가 필요합니다. 별도 서명 APK는 현재 원본과 업데이트 호환성을 확인해야 합니다.
-
-설정 페이지는 다음으로 열 수 있습니다.
-
-```bash
-adb -s 127.0.0.1:5561 shell am start -a android.settings.HARD_KEYBOARD_SETTINGS
-```
