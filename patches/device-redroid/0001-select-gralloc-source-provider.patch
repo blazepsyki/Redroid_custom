@@ -1,0 +1,13 @@
+diff --git a/Android.mk b/Android.mk
+--- a/Android.mk
++++ b/Android.mk
+@@ -139,7 +139,9 @@
+ 
+ 
+ # gbm gralloc
++ifneq ($(WITH_GRALLOC_FIX),true)
+ $(eval $(call define-redroid-prebuilt-lib,gralloc.gbm,,hw/gralloc.gbm.so,hw,,$(gbm_libs)))
++endif
+ 
+ 
+ # redroid audio

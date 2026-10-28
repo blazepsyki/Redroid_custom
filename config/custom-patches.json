@@ -1,0 +1,36 @@
+{
+  "patches": [
+    {
+      "project": "frameworks/base",
+      "path": "services/core/java/com/android/server/pm/ComputerEngine.java",
+      "patch": "patches/frameworks-base/0001-microg-certificate-limited-package-info.patch",
+      "sha256": "6b1722407a5544d76460df8bc755300bb1fd012c0c207d73d8e43764be7296b5",
+      "before_sha256": "c69cda6e4102591b070dcd6877768053cabc73d72c26175d252ea6af8cb0a6dc",
+      "after_sha256": "d1fe5b0367440f353b5b87cba138bd3cfb615728f2d7f908619743d31c768e60"
+    },
+    {
+      "project": "device/redroid-prebuilts",
+      "path": "Android.mk",
+      "patch": "patches/device-redroid/0001-select-gralloc-source-provider.patch",
+      "sha256": "2ba28d5251dc2965a4560737701d02d688e36d58ca9bb1b617e932fed0d9c6bc",
+      "before_sha256": "f01e91e250c5c4d1cafd60cf4a96743b2d576ae045cdc796f75f6c5788d943d4",
+      "after_sha256": "73ceb51e0b716d4d620715a536f98d76e98cff25b2ad872e8e78e87751e30ba7"
+    },
+    {
+      "project": "device/redroid",
+      "path": "redroid_x86_64_only/BoardConfig.mk",
+      "patch": "patches/device-redroid/0002-gate-arm64-abi.patch",
+      "sha256": "1f22e13eddc4847db53aaa6533d823fe18e5666671b34bdd4b12e118aa9b965e",
+      "before_sha256": "5d45caa84ccc35bd784c5d6079bf5884c8cc0ade9c01521bb57f7344175d5e6e",
+      "after_sha256": "1553a1cd539d5644a0b0de8895102db6381c95fa8fe083ac4800d87ef4d55c1e"
+    },
+    {
+      "project": "device/redroid",
+      "path": "redroid_x86_64_only/device.mk",
+      "patch": "patches/device-redroid/0003-gate-native-bridge-properties.patch",
+      "sha256": "30ec969dbd36933fe0c4ac0698857c00ffca7feef67aaa0d08ee5ab8c4d41916",
+      "before_sha256": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30",
+      "after_sha256": "fd19666039468b3d09561aa0e24b629ed259ac70c182b7122fe27cbc8a321ae1"
+    }
+  ]
+}

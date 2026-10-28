@@ -1,0 +1,18 @@
+{
+  "reference_url": "https://github.com/LineageOS/android_frameworks_base",
+  "reference_commit": "e86c9bed834f7c24ba2df4c5e21ab03b5b942bfc",
+  "reference_file": "services/core/java/com/android/server/pm/ComputerEngine.java",
+  "reference_sha256": "9efcfc0fa8440f58f0249767d82524817e9e4a191e6a49beda9c8976aecba87f",
+  "real_certificate_sha256": "9bd06727e62796c0130eb6dab39b73157451582cbd138e86c468acc395d14165",
+  "compatibility_certificate_sha256": "f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83",
+  "packages": [
+    "com.google.android.gms",
+    "com.android.vending"
+  ],
+  "signing_comparison_apis": "unchanged",
+  "installation_signature_policy": "unchanged",
+  "host_policy_checks": 14,
+  "target_compile_status": "passed_services",
+  "target_runtime_status": "passed_selfcheck_and_negative_resign",
+  "runtime_evidence": "build-logs/nas-custom-fixed/nas-fixed-microg-test.json"
+}

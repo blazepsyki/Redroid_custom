@@ -1,0 +1,7 @@
+{
+  "with_gralloc_fix": true,
+  "with_microg_signature_spoofing": true,
+  "with_arm64_translation": true,
+  "with_microg": true,
+  "with_validation_tools": true
+}

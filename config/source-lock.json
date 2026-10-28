@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-27T08:47:08.611686+00:00",
+  "aosp": {
+    "url": "https://android.googlesource.com/platform/manifest",
+    "tag": "android-15.0.0_r36",
+    "tag_object": "1d7a1b4e33e556ed3cce86e57200f37b49cfd480",
+    "manifest_commit": "a0601d2912a6cedcaf97e1372173f8704a2715b0",
+    "default_xml_sha256": "58aee921fa2aa15b97c3de8e1a06fa582da798973803a3da4c8af596a984719b",
+    "build_id": "BP1A.250505.005.D1"
+  },
+  "redroid_manifest": {
+    "url": "https://github.com/remote-android/local_manifests.git",
+    "upstream_ref": "refs/heads/15.0.0",
+    "commit": "a116ba2c17fa88de495434211ea9c74f0d3f922f",
+    "upstream_xml_sha256": "e629dbfef9d5dd16f8981521fce7ec95af25d7bc46ff8a960ce0d4f71aa33c1a",
+    "pinned_file": "manifests/redroid.xml",
+    "pinned_xml_sha256": "78218b5d16ca19f7dc268104396567d40d30c5d3e1aeb87341c59fba079f3216"
+  },
+  "redroid_projects": [
+    {
+      "path": "device/redroid",
+      "name": "device_redroid",
+      "url": "https://github.com/remote-android/device_redroid.git",
+      "upstream_ref": "refs/heads/redroid-15.0.0",
+      "commit": "9248d0ee4e28241243c241d8e43faa707b13376e"
+    },
+    {
+      "path": "device/redroid-prebuilts",
+      "name": "device_redroid-prebuilts",
+      "url": "https://github.com/remote-android/device_redroid-prebuilts.git",
+      "upstream_ref": "refs/heads/master",
+      "commit": "6248d6a71db7222d1b1c4545b90e3850dffca55f"
+    },
+    {
+      "path": "hardware/redroid/c2",
+      "name": "redroid-c2",
+      "url": "https://github.com/remote-android/redroid-c2.git",
+      "upstream_ref": "refs/heads/master",
+      "commit": "98c7c28bb134ea05e020fc29440c809672b6eb3e"
+    },
+    {
+      "path": "hardware/redroid/omx",
+      "name": "redroid-omx",
+      "url": "https://github.com/remote-android/redroid-omx.git",
+      "upstream_ref": "refs/heads/master",
+      "commit": "c1917368fdc999f67574d070488245d357d06dd7"
+    },
+    {
+      "path": "vendor/redroid",
+      "name": "vendor_redroid",
+      "url": "https://github.com/remote-android/vendor_redroid.git",
+      "upstream_ref": "refs/heads/master",
+      "commit": "1686c1825c146891d06004e35e7c362b58d3f1bc"
+    }
+  ],
+  "redroid_patches": {
+    "url": "https://github.com/remote-android/redroid-patches.git",
+    "commit": "a5c70c0dd89c12b5027c902ab4182f31d38f3bb7",
+    "directory": "android-15.0.0_r36",
+    "patches": [
+      {
+        "project": "external/minijail",
+        "file": "external/minijail/0001-disable-seccomp.patch",
+        "sha256": "a8807b51a9dab45a67b0f8d3a1c444ccc64f626211ddb810e3a452da4f24b943",
+        "upstream_commit": "5ea8050366c4bf2136983f6b9dff4ee35f65b598"
+      },
+      {
+        "project": "external/selinux",
+        "file": "external/selinux/0001-ignore-selinux.patch",
+        "sha256": "ff68ee9b229522f37b125c8944fde3471ff4832e6db6720a2a73d599f8a3ac47",
+        "upstream_commit": "0b7cc7e1d8433431c1ecf9c1058b70370c89a6a6"
+      },
+      {
+        "project": "frameworks/av",
+        "file": "frameworks/av/0001-workaround-for-mesa-video-playback.patch",
+        "sha256": "8f2ee85e812baf288ab07e96fd450185be6289260d883c94605348b928dc672a",
+        "upstream_commit": "14d223ce17fe490c75145130bcb11a2c80365f15"
+      },
+      {
+        "project": "frameworks/av",
+        "file": "frameworks/av/0002-bring-back-OMX-nodes.patch",
+        "sha256": "b30fd6d121a62c95f310c5e906d05c588aebcf7ac7e7057725c420b33881b9cf",
+        "upstream_commit": "5145109bb45c69e61d424f5aecf2186283f86ad4"
+      },
+      {
+        "project": "frameworks/base",
+        "file": "frameworks/base/0001-ignore-cgroup-error.patch",
+        "sha256": "9a6ce9c5f574020a9aba80cfad1929ccc1c98361fd2c1f73d8b9c578fc046c84",
+        "upstream_commit": "22e830fea7d4fe6e962ff0f095846d44f46207a4"
+      },
+      {
+        "project": "frameworks/native",
+        "file": "frameworks/native/0001-fix-booting.patch",
+        "sha256": "edf4f57cb96994188a2fe7a3cdb03c433ec14b00bd8394bc2997666935c231d8",
+        "upstream_commit": "c81007a9003203a45f0c43cc33431b9a7dc93af4"
+      },
+      {
+        "project": "packages/modules/Connectivity",
+        "file": "packages/modules/Connectivity/0001-fix-booting.patch",
+        "sha256": "d1858151fe2bf943e34c8e2112fd0fbec225e7262a641c885c84fb22b3ed96c0",
+        "upstream_commit": "57886dfd33234781b54c9ed6643b9b8e0c7d9196"
+      },
+      {
+        "project": "packages/modules/Connectivity",
+        "file": "packages/modules/Connectivity/0002-ignore-nativeSynchronizeKernelRCU-error.patch",
+        "sha256": "583f38e65dd50e9398f997b457b4a761a177d4a4e925ad66bcd9c4d6096b6f8f",
+        "upstream_commit": "0ce8ef0cfc86e791b449bc106159dd0e9dcdb475"
+      },
+      {
+        "project": "system/bpf",
+        "file": "system/bpf/0001-fix-booting.patch",
+        "sha256": "bb687f2751ace3b54618f0f7e2f6a00a3a92e305873aeee205a4f41c4bdf7801",
+        "upstream_commit": "d3b2c6e9f8f09b76991b32436240930ba875f5ff"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0001-fix-booting.patch",
+        "sha256": "e76366375b23b47be50293b2f4c529b43a4140aef3d579a70dcf903cf6a2e1d5",
+        "upstream_commit": "8752fb343d0eee9023b119998e07a2b69b878b96"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0002-allow-override-ro.-prop.patch",
+        "sha256": "fe09d894abe5f29afbc4e9f58ad12fd1e77fde83d6e7038c28b4aad827350030",
+        "upstream_commit": "6357580325e58681df67299b1a2ad33ea3357858"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0003-fix-first-stage-mount.patch",
+        "sha256": "be61941771cff17d322c23b295f99e79651591bed885867b7fa82d80c8bf5379",
+        "upstream_commit": "b2e9c123e0dd39ddc0cc46be441cfa317bfd4f22"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0004-ignore-input-subsystem.patch",
+        "sha256": "4e9754d84ddfe4df5eec69a5058603fa2d35b650ae9fe578f5dae8bd33bfbb2a",
+        "upstream_commit": "b6d58065e28607b34313e277b94b653cfa4b2224"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0005-ignore-devfs-mount.patch",
+        "sha256": "5b1bdebf5d790876afc0eab05f63207630a14bf4b3a9c8670d63bc83728bc21a",
+        "upstream_commit": "26be568b5c1a7823737e1c4f6f8be198b4c8bf2d"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0006-auto-alloc-binder-devices.patch",
+        "sha256": "f55c66a101b7bc5dc7dfe2bcff1a2a20764b2d766387f9d3ef8189ca0e073255",
+        "upstream_commit": "6cedb36480a13deb50fa49a22f6fcef55905f73a"
+      },
+      {
+        "project": "system/core",
+        "file": "system/core/0007-skip-fusectl-mount.patch",
+        "sha256": "a0518ac25697f1e5be3c3fe10c3b941b1eba35d06ea975757e6a13bd451c0583",
+        "upstream_commit": "9687a7aec8c8bddc14a2464bd7d45b5ca22244d0"
+      },
+      {
+        "project": "system/libhwbinder",
+        "file": "system/libhwbinder/0001-fix-booting.patch",
+        "sha256": "531ef703338a4fb256a900c3d650b2aff44899a13c635e441356c75bc97ecfee",
+        "upstream_commit": "3bba0a409b16bf06ba09d45ed4836f8d5b779498"
+      },
+      {
+        "project": "system/libvintf",
+        "file": "system/libvintf/0001-ignore-compatibility-check.patch",
+        "sha256": "2520a6cdf16eed58f75332fe144723aee6393b2a6b075410207c6ce12ea4c6bb",
+        "upstream_commit": "05280bbcc0c2fc80f7bff7c19dad62e6ba7d9b1b"
+      },
+      {
+        "project": "system/libvintf",
+        "file": "system/libvintf/0002-ignore-proc-config.gz-failed-read.patch",
+        "sha256": "40f816b7c97572ca260f50a17d6859353781dc966a095fd73d1385a242a576ff",
+        "upstream_commit": "d3d1248ef48a27df5d32e3beaaddbd3d5e21ea6b"
+      },
+      {
+        "project": "system/netd",
+        "file": "system/netd/0001-ignore-iptables-error.patch",
+        "sha256": "db932bcdf25edeb7b7dc9ab1be40a52e531546437a6ea6ab7a8a0e47cf94712d",
+        "upstream_commit": "8ea39ed126769c1ba1f04d17c37f7024d5bd0ef5"
+      },
+      {
+        "project": "system/netd",
+        "file": "system/netd/0002-ignore-bpf-error.patch",
+        "sha256": "81e34d300655a7f0a989f1f6daac7b00c352366591421773831c6192d32d8bff",
+        "upstream_commit": "824f0f2e8e0819536d469027679c1e27a07a88c9"
+      },
+      {
+        "project": "system/netd",
+        "file": "system/netd/0003-ignote-getTetherStats-error.patch",
+        "sha256": "5166e1a22ad533e37ccf0894bf7b7a34f54878afd1e1fbd11666a2a4a5f79a94",
+        "upstream_commit": "c9c7f6e6471cc2552541fffc432e50b36e02d9f8"
+      },
+      {
+        "project": "system/vold",
+        "file": "system/vold/0001-ignore-project-quota-error.patch",
+        "sha256": "6d2d0e9412e32ad519f40b8b996079ce0802d1272258138ae1e75a84b4f929dd",
+        "upstream_commit": "c30fd779887775bdb265fb2c57984f92264fc5c9"
+      }
+    ]
+  },
+  "target": {
+    "product": "redroid_x86_64_only",
+    "release": "ap3a",
+    "variant": "userdebug",
+    "lunch": "redroid_x86_64_only-ap3a-userdebug"
+  },
+  "gralloc": {
+    "delivery": "redroid_prebuilt",
+    "project": "device/redroid-prebuilts",
+    "path": "prebuilts/x86_64/lib/hw/gralloc.gbm.so",
+    "sha256": "f06f7b2e6d84d3a8f81a91b32d1227c0f3cf6d2cd997ddfbdf399e796b731621",
+    "source_commit": null
+  },
+  "sync": {
+    "status": "complete",
+    "manifest_file": "config/source-manifest.xml",
+    "manifest_sha256": "679c112cf587c47cc0fd8a0d1c640e11e8d079a2e594ecaca62c3dfcd1a3ff1d",
+    "project_count": 1035
+  },
+  "official_patch_status": "complete"
+}

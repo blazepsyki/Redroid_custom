@@ -1,0 +1,108 @@
+{
+  "features": {
+    "with_gralloc_fix": true,
+    "with_microg_signature_spoofing": true,
+    "with_arm64_translation": true,
+    "with_microg": true,
+    "with_validation_tools": true
+  },
+  "files": {
+    "device/redroid-prebuilts/Android.mk": "73ceb51e0b716d4d620715a536f98d76e98cff25b2ad872e8e78e87751e30ba7",
+    "device/redroid/redroid_x86_64_only/BoardConfig.mk": "1553a1cd539d5644a0b0de8895102db6381c95fa8fe083ac4800d87ef4d55c1e",
+    "device/redroid/redroid_x86_64_only/device.mk": "fd19666039468b3d09561aa0e24b629ed259ac70c182b7122fe27cbc8a321ae1",
+    "frameworks/base/services/core/java/com/android/server/pm/ComputerEngine.java": "d1fe5b0367440f353b5b87cba138bd3cfb615728f2d7f908619743d31c768e60",
+    "frameworks/base/services/core/java/com/android/server/pm/MicrogCertificatePolicy.java": "531e9e34df50ecbffc148d6ebf8470e609db96f2c2fde87e23ec0ab582967607",
+    "frameworks/base/services/core/java/com/android/server/pm/MicrogSignaturePolicy.java": "36fb83155ef1373b174cd79deaa42f87036198be128e7a7f4bcd115009ceb5e8",
+    "frameworks/base/services/tests/servicestests/src/com/android/server/pm/MicrogSignaturePolicyTest.java": "ed2ae11c1e4b5464e3a0341437a86799401741e00bb28538bbeef23ef42b54fc",
+    "product.mk": "daa908d148af6531a1cf2bfe8d4da339c5196cbe256dd909cdcce92331cc826b",
+    "vendor/custom/custom.mk": "403ec1b1aeb9c114432a315efd7d2c205c1c02b9fd946b34e722573f6b1a3993",
+    "vendor/custom/features.mk": "14944daf90fbc3ae732931e7561a9437a7a3972556f30d73556120428ca60e56",
+    "vendor/custom/gralloc/Android.mk": "e51e7e471a595ffa0afbe96cadda0ee4d6275c4e57fc525de4a0b4bf3729011f",
+    "vendor/custom/gralloc/gralloc_format_test.cpp": "a6734407e3915f240703e3d4d6ed1241d2cca8d923274637b95113f938a7525a",
+    "vendor/custom/gralloc/source/gralloc.cpp": "5c24ea5cfc14ebde08e55d8c02409b5ce0be865e9351f9660c904cf2708750d6",
+    "vendor/custom/gralloc/source/gralloc_drm.h": "0f9c4708e854f0d90a5632073d26b4de8b1981fbc8230bb24226daf7dd7c6f43",
+    "vendor/custom/gralloc/source/gralloc_gbm.cpp": "40a576ac45f6d077de17fd66625f5b0a8bcb056a764cb896e6f4cdd662325512",
+    "vendor/custom/gralloc/source/gralloc_gbm_priv.h": "6f3a1190508598fd14bcc90e3719e93cb9b37562443a71ea53b7f89a8c2e92e7",
+    "vendor/custom/microg/Android.bp": "0b5e589277551b8d7cf295a300f2e07a4264b1e1d409d8a07f8fbf22a5f69e3f",
+    "vendor/custom/microg/GmsCore.apk": "e5e6cba078bdec812b5450599350e5c1a12c8b7438da5bf77123af170f8c1a35",
+    "vendor/custom/microg/Phonesky.apk": "d284a0719ce11e98576fc8215f0ad0a6b7ffbc1bf874d9f895e05cb00ba96384",
+    "vendor/custom/microg/component-overrides-com.android.vending.xml": "9e997536bfcee6df1710bd4fc3b91231b584ad1120404f052474385e5b80698d",
+    "vendor/custom/microg/microg.mk": "4b16730c9ea5d8e1b95cc6b332d41502820c247fb0a6d99bc597d5b413a1681f",
+    "vendor/custom/microg/privapp-permissions-com.android.vending.xml": "1b62cd8828c400c2e3ba7543541525c68c68328d602bc3c4f079f45da69b779c",
+    "vendor/custom/microg/privapp-permissions-com.google.android.gms.xml": "762aee970b85ef9e914e956252a57f9db43caa4f0144ab1bdf153b66c6826591",
+    "vendor/custom/nativebridge/Android.bp": "a828d86e8e998c9e82e59aae63457f78793ffe3214bbb0580ebe23689ac2b4c3",
+    "vendor/custom/nativebridge/Android.mk": "26de07a32bf71dcf862177e44ff5ccefe92e8c668ffa5c4404b6b98d6e8cd9cf",
+    "vendor/custom/nativebridge/files/bin/ndk_translation_program_runner_binfmt_misc_arm64": "dc9599855ba54a081d6b58b2227d2f99d0148a071bb496ed7436a66a1236b5af",
+    "vendor/custom/nativebridge/files/etc/cpuinfo.arm64.txt": "0a6dee4422284928541a4d573f977b78f321182bb012755182f38a79769d080a",
+    "vendor/custom/nativebridge/files/etc/ld.config.arm64.txt": "581d312d1b2ce6cd205aa539309865710fcc3fc15918012aa751edee7819d83a",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation.so": "9b5808354a85d722a290ae879400b909aa961955e80ea1a7e807aea9416d92f9",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libEGL.so": "c3a57d573c61afcaaf4a6486438a67a8086e12253e49990c920c3a8fcc800b0f",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libGLESv1_CM.so": "47b014e70781ad484ce49caf0776d2b27fd6fbbb4dd0988d637d8a74f3ef9279",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libGLESv2.so": "618f5de57b69d702f4576444106052b26bbd2532914e165febcb7ef1b1b62c2a",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libGLESv3.so": "770290dedaa6789511b317659a4550ccf57d4aebc58d546e8947360bebc8e0f8",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libOpenMAXAL.so": "38f51c297e4ddfc8354a0d0b71aaa5b64391086810d9dbd2dd64ca546c191a8c",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libOpenSLES.so": "8007637a17be40a6b8b56b5e6567c5e1c929b6be45e945c16966179cf23e09f3",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libaaudio.so": "0dff2dee127a35b25a0c69c2f26d59ebbe1e0cb8ed79a50d8b6eb9ef85d9205c",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libamidi.so": "3066791a2a5ce89f1d52c74dfdce8fed8efa63577e9a9b26fa959d639f8194f0",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libandroid.so": "e2ec03eb1ee5bc17bf34c36c672ae4118c20e261d4c61b2781f1181d198cfef2",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libandroid_runtime.so": "cb024e9e6fe97a9ddf5c84628205fcf3fb352abcee6cb29a44b200699b932876",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libbinder_ndk.so": "3d9f27510a033412cf2bde9d2e295c71dd8734acb3ae868c8a202457051ff42b",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libc.so": "c49d1c45b9e111ca44f9645ae2d88a9b955e7cf5c8fe7ef17c34f61604848984",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libcamera2ndk.so": "19e3cdb7e61bdd00a8fb938571437a1688003bc0d49fd2c967fac23f4fc669e1",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libjnigraphics.so": "fedc207f4287118ef6be35224436146b8355b366341a0455fc02cc16cf2cce45",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libmediandk.so": "32ae2e99c251e4eaed2657e48968c1804fe80e51a472476e7bda4d5ea1559950",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libnativehelper.so": "fa479f0960ba248ce9bfb475185bdcebb06ca4169da0146ad1056282fbd7d605",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libnativewindow.so": "09f4e0f315f92abbc0493e2548562b570aaa50c34c831fb0d84501a6e5371ebd",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libneuralnetworks.so": "8732303dc4b42ea72e0b99302df448d21b6acb087ca89cc00ac9a2e1043a163b",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libvulkan.so": "686d3481b43d323590eaebb396b2ee247a5be2ead71a83e26fda4cd39e855058",
+    "vendor/custom/nativebridge/files/lib64/libndk_translation_proxy_libwebviewchromium_plat_support.so": "5f2cd584dba17f4a01f08f676392f38417c7a2e9893396724f561a473b5b992a",
+    "vendor/custom/nativebridge/nativebridge.mk": "85b3f1c99f30eb411eb909ef122ce5526908be174ad56e35c8f7ac400b0beca7"
+  },
+  "originals": {
+    "frameworks/base/services/core/java/com/android/server/pm/ComputerEngine.java": "c69cda6e4102591b070dcd6877768053cabc73d72c26175d252ea6af8cb0a6dc",
+    "device/redroid-prebuilts/Android.mk": "f01e91e250c5c4d1cafd60cf4a96743b2d576ae045cdc796f75f6c5788d943d4",
+    "device/redroid/redroid_x86_64_only/BoardConfig.mk": "5d45caa84ccc35bd784c5d6079bf5884c8cc0ade9c01521bb57f7344175d5e6e",
+    "device/redroid/redroid_x86_64_only/device.mk": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30"
+  },
+  "plan_sha256": "0d22c19d61345213b3f98011d7fea4961be269e55b4cc62b1d5ed38dafeb7b39",
+  "gralloc_source": {
+    "url": "https://github.com/remote-android/gbm_gralloc.git",
+    "commit": "a8874a18ad7884ea713f45047efad080fe973712"
+  },
+  "patches": [
+    {
+      "project": "frameworks/base",
+      "path": "services/core/java/com/android/server/pm/ComputerEngine.java",
+      "patch": "patches/frameworks-base/0001-microg-certificate-limited-package-info.patch",
+      "sha256": "6b1722407a5544d76460df8bc755300bb1fd012c0c207d73d8e43764be7296b5",
+      "before_sha256": "c69cda6e4102591b070dcd6877768053cabc73d72c26175d252ea6af8cb0a6dc",
+      "after_sha256": "d1fe5b0367440f353b5b87cba138bd3cfb615728f2d7f908619743d31c768e60"
+    },
+    {
+      "project": "device/redroid-prebuilts",
+      "path": "Android.mk",
+      "patch": "patches/device-redroid/0001-select-gralloc-source-provider.patch",
+      "sha256": "2ba28d5251dc2965a4560737701d02d688e36d58ca9bb1b617e932fed0d9c6bc",
+      "before_sha256": "f01e91e250c5c4d1cafd60cf4a96743b2d576ae045cdc796f75f6c5788d943d4",
+      "after_sha256": "73ceb51e0b716d4d620715a536f98d76e98cff25b2ad872e8e78e87751e30ba7"
+    },
+    {
+      "project": "device/redroid",
+      "path": "redroid_x86_64_only/BoardConfig.mk",
+      "patch": "patches/device-redroid/0002-gate-arm64-abi.patch",
+      "sha256": "1f22e13eddc4847db53aaa6533d823fe18e5666671b34bdd4b12e118aa9b965e",
+      "before_sha256": "5d45caa84ccc35bd784c5d6079bf5884c8cc0ade9c01521bb57f7344175d5e6e",
+      "after_sha256": "1553a1cd539d5644a0b0de8895102db6381c95fa8fe083ac4800d87ef4d55c1e"
+    },
+    {
+      "project": "device/redroid",
+      "path": "redroid_x86_64_only/device.mk",
+      "patch": "patches/device-redroid/0003-gate-native-bridge-properties.patch",
+      "sha256": "30ec969dbd36933fe0c4ac0698857c00ffca7feef67aaa0d08ee5ab8c4d41916",
+      "before_sha256": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30",
+      "after_sha256": "fd19666039468b3d09561aa0e24b629ed259ac70c182b7122fe27cbc8a321ae1"
+    }
+  ],
+  "status": "applied",
+  "recorded_at": "2026-10-28T02:45:11.393889+00:00"
+}

@@ -1,0 +1,16 @@
+diff --git a/redroid_x86_64_only/device.mk b/redroid_x86_64_only/device.mk
+--- a/redroid_x86_64_only/device.mk
++++ b/redroid_x86_64_only/device.mk
+@@ -1,9 +1,11 @@
+ PRODUCT_COPY_FILES += \
+     device/redroid/mediacodec.policy.x86:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy \
+ 
++ifeq ($(WITH_ARM64_TRANSLATION),true)
+ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.enable.native.bridge.exec=1 \
+     ro.dalvik.vm.isa.arm64=x86_64 \
+-    ro.dalvik.vm.native.bridge=libnb.so \
++    ro.dalvik.vm.native.bridge=libnb.so
++endif
+ 
+ $(call inherit-product, device/redroid-prebuilts/prebuilts_x86.mk)

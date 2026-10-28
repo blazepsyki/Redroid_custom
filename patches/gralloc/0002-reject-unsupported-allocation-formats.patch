@@ -1,0 +1,26 @@
+diff --git a/gralloc_gbm.cpp b/gralloc_gbm.cpp
+--- a/gralloc_gbm.cpp
++++ b/gralloc_gbm.cpp
+@@ -372,6 +372,13 @@
+ {
+ 	struct gbm_bo *bo;
+ 	native_handle_t *handle;
++	int bpp = gralloc_gbm_get_bpp(format);
++
++	if (unlikely(bpp == 0 || get_gbm_format(format) == 0)) {
++		ALOGE("unsupported allocation format: 0x%x", format);
++		errno = EINVAL;
++		return NULL;
++	}
+ 
+ 	handle = gralloc_handle_create(width, height, format, usage);
+ 	if (!handle)
+@@ -386,7 +393,7 @@
+ 	gbm_bo_handle_map.emplace(handle, bo);
+ 
+ 	/* in pixels */
+-	*stride = gralloc_handle(handle)->stride / gralloc_gbm_get_bpp(format);
++	*stride = gralloc_handle(handle)->stride / bpp;
+ 
+ 	return handle;
+ }

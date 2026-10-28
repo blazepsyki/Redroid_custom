@@ -1,0 +1,18 @@
+{
+  "recorded_at": "2026-10-27T17:34:37+09:00",
+  "wsl_distribution": "Ubuntu-26.04",
+  "docker_engine": "29.9.2",
+  "docker_buildx": "0.38.1",
+  "docker_compose": "5.6.1",
+  "builder_tag": "redroid-builder:a15-ubuntu22.04",
+  "builder_id": "sha256:8dfb5387322e0abd198c13706299bdb5d5bbba1c3b6227b75c32e14a96760395",
+  "builder_repo_digests": [
+    "redroid-builder@sha256:8dfb5387322e0abd198c13706299bdb5d5bbba1c3b6227b75c32e14a96760395"
+  ],
+  "builder_size_bytes": 945323869,
+  "base_repo_digest": "ubuntu@sha256:e0f80c829509ef4df9e76bd8944eb7b8ec25cbb379b112a7f9448b2c77a77c9b",
+  "package_manifest": "build-logs/environment/builder-packages.tsv",
+  "aosp_build_verified": true,
+  "verification_build_run_id": "20261027T110705180722Z",
+  "verification_finished_at": "2026-10-27T21:53:34.374284+09:00"
+}

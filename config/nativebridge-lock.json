@@ -1,0 +1,538 @@
+{
+  "package": {
+    "path": "system-images;android-35;google_apis;x86_64",
+    "revision": 9,
+    "archive": "x86_64-35_r09.zip",
+    "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-35_r09.zip",
+    "size": 1738815903,
+    "sha1": "0103e6dab21290c4b9d16550a3ce99476f884eef",
+    "license": "android-sdk-license"
+  },
+  "archive_sha256": "c67b9ba0ff5bc0eb6d046871bfa228af14d4d47b02f0cdae94f048e511b7566e",
+  "source_properties": [
+    "Pkg.Desc=System Image x86_64 with Google APIs.",
+    "Pkg.Revision=9",
+    "Pkg.Dependencies=emulator#33.1.24",
+    "AndroidVersion.ApiLevel=35",
+    "AndroidVersion.ExtensionLevel=13",
+    "AndroidVersion.IsBaseSdk=true",
+    "SystemImage.Abi=x86_64",
+    "SystemImage.TagId=google_apis",
+    "SystemImage.TagDisplay=Google APIs",
+    "SystemImage.GpuSupport=true",
+    "Addon.VendorId=google",
+    "Addon.VendorDisplay=Google Inc."
+  ],
+  "source_fingerprint": "google/sdk_gphone64_x86_64/emu64xa:15/AE3A.240806.043/12960925:userdebug/dev-keys",
+  "source_native_bridge": "libndk_translation.so",
+  "excluded": [
+    "etc/init/ndk_translation.rc",
+    "etc/binfmt_misc/"
+  ],
+  "install_root": "system",
+  "symlinks": {
+    "lib64/libnb.so": "libndk_translation.so"
+  },
+  "files": [
+    {
+      "path": "bin/arm64/app_process64",
+      "mode": "0755",
+      "size": 51208,
+      "sha256": "17a50b02d36825e949f887be126b87c8854e393657e54b64d816af195f03bcc3"
+    },
+    {
+      "path": "bin/arm64/linker64",
+      "mode": "0755",
+      "size": 883800,
+      "sha256": "f351f16f8181f1af608f0a06f632e67ddb4bf4538b15921f705cfbfa45dfb99a"
+    },
+    {
+      "path": "bin/ndk_translation_program_runner_binfmt_misc_arm64",
+      "mode": "0755",
+      "size": 85536,
+      "sha256": "dc9599855ba54a081d6b58b2227d2f99d0148a071bb496ed7436a66a1236b5af"
+    },
+    {
+      "path": "etc/cpuinfo.arm64.txt",
+      "mode": "0644",
+      "size": 325,
+      "sha256": "0a6dee4422284928541a4d573f977b78f321182bb012755182f38a79769d080a"
+    },
+    {
+      "path": "etc/ld.config.arm64.txt",
+      "mode": "0644",
+      "size": 4268,
+      "sha256": "581d312d1b2ce6cd205aa539309865710fcc3fc15918012aa751edee7819d83a"
+    },
+    {
+      "path": "lib64/arm64/android.hardware.renderscript@1.0.so",
+      "mode": "0644",
+      "size": 419384,
+      "sha256": "a3d57ceb93f2ed7a5fb2ab346b623f1914fc305e0e93297d930f8f540ba5c43b"
+    },
+    {
+      "path": "lib64/arm64/ld-android.so",
+      "mode": "0644",
+      "size": 34144,
+      "sha256": "232dba1b234724e169baba4eda3e275b8151679de8e73f1877e1217a04ea72bf"
+    },
+    {
+      "path": "lib64/arm64/libEGL.so",
+      "mode": "0644",
+      "size": 52952,
+      "sha256": "351afcd44817c0940ab7a0973e2c26d849ad2a125e9299360c298a3240c756a6"
+    },
+    {
+      "path": "lib64/arm64/libGLESv1_CM.so",
+      "mode": "0644",
+      "size": 70608,
+      "sha256": "388eaafd813cb28f6b9764b854e659df0ebf75b768cf5fe964755e81239722a6"
+    },
+    {
+      "path": "lib64/arm64/libGLESv2.so",
+      "mode": "0644",
+      "size": 173456,
+      "sha256": "babbcf63e7ebc00fa68a1f0be5774a76860b491aef5915ab2bb10cd41967722a"
+    },
+    {
+      "path": "lib64/arm64/libGLESv3.so",
+      "mode": "0644",
+      "size": 173456,
+      "sha256": "5dbe1504d95726fab6aba511319b515067b2ea0def978d14b0efc46b9fcb5945"
+    },
+    {
+      "path": "lib64/arm64/libOpenMAXAL.so",
+      "mode": "0644",
+      "size": 51464,
+      "sha256": "e772af333ffef41829da4e2e96738048b1b10bd25ce4216ef585c85e19fc4211"
+    },
+    {
+      "path": "lib64/arm64/libOpenSLES.so",
+      "mode": "0644",
+      "size": 51464,
+      "sha256": "ad50fd66eda54aa30dd5512e30d96e22d318ff3dc5de855bbf2f52ddffa63fd0"
+    },
+    {
+      "path": "lib64/arm64/libRS.so",
+      "mode": "0644",
+      "size": 87040,
+      "sha256": "9346d7770b9d4b2fc055c1526b63ae931c57863d632dde37c7d3b588493d13be"
+    },
+    {
+      "path": "lib64/arm64/libRSCpuRef.so",
+      "mode": "0644",
+      "size": 448720,
+      "sha256": "2187aa678ba39189314d324cca4a8e207049febbfc5e9b739ae20205093bfb3a"
+    },
+    {
+      "path": "lib64/arm64/libRSDriver.so",
+      "mode": "0644",
+      "size": 248640,
+      "sha256": "4a00f2c6086d20be2d51a9bd33f78eec51ed2bef4c21680e7fb067f96cdf2f5c"
+    },
+    {
+      "path": "lib64/arm64/libRSSupport.so",
+      "mode": "0644",
+      "size": 965936,
+      "sha256": "08dc0dd2c864fb46b8001a1a8b10660723071500db43446b98540534f2f1c9ff"
+    },
+    {
+      "path": "lib64/arm64/libRS_internal.so",
+      "mode": "0644",
+      "size": 332152,
+      "sha256": "d476e344466e75c11a85b6a50347a979a776be211d3404a139e33a91e2198c90"
+    },
+    {
+      "path": "lib64/arm64/libaaudio.so",
+      "mode": "0644",
+      "size": 36176,
+      "sha256": "05d692ff05056606be4b92df868a4de6e8b760c9e46869a5bac0cdcbb570f585"
+    },
+    {
+      "path": "lib64/arm64/libamidi.so",
+      "mode": "0644",
+      "size": 35744,
+      "sha256": "d41884fddd5eb0d680e8123f75139dfb2989c21689ecf68baf4b416558085231"
+    },
+    {
+      "path": "lib64/arm64/libandroid.so",
+      "mode": "0644",
+      "size": 87704,
+      "sha256": "ce4ecb4b49157e5178e32a08adaa93c141c477647605d7505f0396e307e4990e"
+    },
+    {
+      "path": "lib64/arm64/libandroid_runtime.so",
+      "mode": "0644",
+      "size": 306880,
+      "sha256": "1f0e1f707e1d67ca18a5e869f22123e067850f3e7f81809e0b73261939be8d78"
+    },
+    {
+      "path": "lib64/arm64/libandroidicu.so",
+      "mode": "0644",
+      "size": 52712,
+      "sha256": "23c832d86b6a94b439bef7fcccbafdc0ef69f8c6d0ec57734d9d9f0f23c13f5a"
+    },
+    {
+      "path": "lib64/arm64/libbase.so",
+      "mode": "0644",
+      "size": 218928,
+      "sha256": "7e390ac59fc4db81b3f4319b41cac9fc5a59ef748a1e01dc2f9e19c6d27ff9a2"
+    },
+    {
+      "path": "lib64/arm64/libbcinfo.so",
+      "mode": "0644",
+      "size": 1012712,
+      "sha256": "acb731f6774361e93efb2cee5b2f3193a184a7fad6437172819044673eeb1b00"
+    },
+    {
+      "path": "lib64/arm64/libbinder_ndk.so",
+      "mode": "0644",
+      "size": 53512,
+      "sha256": "728d15a49773fae4a3b0691373dc607dbd458dceb4f110fc5cb0ed2e602f99e3"
+    },
+    {
+      "path": "lib64/arm64/libblas.so",
+      "mode": "0644",
+      "size": 1303528,
+      "sha256": "6cf0d09069b5fae3a763955deef1882b4d7f432614edd7d31bac0a2f2b1b1ecd"
+    },
+    {
+      "path": "lib64/arm64/libc++.so",
+      "mode": "0644",
+      "size": 1083168,
+      "sha256": "794eb8fafd7be35da3725e9ec0b15189c6f4f2544f5b78afd8a647dde5b69195"
+    },
+    {
+      "path": "lib64/arm64/libc.so",
+      "mode": "0644",
+      "size": 1043784,
+      "sha256": "2ff4bf0e733a1103333d0742890d66e88d7aabe05c0f977f3b2d1ae470269b4c"
+    },
+    {
+      "path": "lib64/arm64/libcamera2ndk.so",
+      "mode": "0644",
+      "size": 36240,
+      "sha256": "95cbfa7efdb1a95f0f7b3cab3aba6f7125359c784332b18475536b144597b101"
+    },
+    {
+      "path": "lib64/arm64/libcompiler_rt.so",
+      "mode": "0644",
+      "size": 68464,
+      "sha256": "b4ba2c917fde2c6ebf7ab080d622115458926410ccc56f603bf5498c91506a40"
+    },
+    {
+      "path": "lib64/arm64/libcrypto.so",
+      "mode": "0644",
+      "size": 1394600,
+      "sha256": "a0d302e96f33687dc9275e6e9e8aefdf45f16ce1b3b2588ff79687f977e3d9fa"
+    },
+    {
+      "path": "lib64/arm64/libcutils.so",
+      "mode": "0644",
+      "size": 118272,
+      "sha256": "ccd02e23cd08b837d8d79c389e267f9da62acea0b71acde0ca5524466c1facee"
+    },
+    {
+      "path": "lib64/arm64/libdl.so",
+      "mode": "0644",
+      "size": 50760,
+      "sha256": "4841d2c7d1959019ccbdb252a9b844bd874f7c9c53003189353b18cd69bef747"
+    },
+    {
+      "path": "lib64/arm64/libdl_android.so",
+      "mode": "0644",
+      "size": 34664,
+      "sha256": "c007614917439e9e4f6a357d7990367ae797f8c6a50a026467a43248efdb1cdd"
+    },
+    {
+      "path": "lib64/arm64/libft2.so",
+      "mode": "0644",
+      "size": 637672,
+      "sha256": "c28d00aa4d7a258b4508921083e1359ff4bf3f1289116345a35948f268b025af"
+    },
+    {
+      "path": "lib64/arm64/libhidlbase.so",
+      "mode": "0644",
+      "size": 703128,
+      "sha256": "3749b3a70dd373017203027a7b84fd61001dc9a19cc3e14682d139720ee29802"
+    },
+    {
+      "path": "lib64/arm64/libicu.so",
+      "mode": "0644",
+      "size": 70520,
+      "sha256": "3635d431b94b607884b5aaddd31e1da658e7724a912cdd6f24b63d6e52cd01bf"
+    },
+    {
+      "path": "lib64/arm64/libicui18n.so",
+      "mode": "0644",
+      "size": 2799504,
+      "sha256": "b5c5bf33577350a337a6f907984d49b577140f429ebd2e19486096e2e8af28e1"
+    },
+    {
+      "path": "lib64/arm64/libicuuc.so",
+      "mode": "0644",
+      "size": 1986920,
+      "sha256": "80b125292dc797e147999ecc415f8f3f4893efc4aa9f55089e3cbd00da82e24a"
+    },
+    {
+      "path": "lib64/arm64/libjnigraphics.so",
+      "mode": "0644",
+      "size": 35896,
+      "sha256": "3b2bfddff05b12f6f298ff126f1b0c8e9f97f9e24cb82bb5d2df190cdc7ecd20"
+    },
+    {
+      "path": "lib64/arm64/liblog.so",
+      "mode": "0644",
+      "size": 102680,
+      "sha256": "80ef3aaea996b8048b5436514696006e18d9e62706ff082d295a10f80e3656ae"
+    },
+    {
+      "path": "lib64/arm64/liblzma.so",
+      "mode": "0644",
+      "size": 200168,
+      "sha256": "41a7941fa47c3343b330d92cf307f90090a7403094867262b95425f2df85d383"
+    },
+    {
+      "path": "lib64/arm64/libm.so",
+      "mode": "0644",
+      "size": 249208,
+      "sha256": "9cc799be57e74ba89f62cc264389d88db99f14f2444ff600fb2ea3804f1747c0"
+    },
+    {
+      "path": "lib64/arm64/libmediandk.so",
+      "mode": "0644",
+      "size": 84232,
+      "sha256": "c42fb1e1d71a2f8c5244024891f2cc31383c04c2c8c025fe1f52cbcca8812049"
+    },
+    {
+      "path": "lib64/arm64/libnative_bridge_vdso.so",
+      "mode": "0644",
+      "size": 34512,
+      "sha256": "c90443680c352db36d610ccb30ff92f2e0a4b2e37a5410402d0c224adbf52b24"
+    },
+    {
+      "path": "lib64/arm64/libnativehelper.so",
+      "mode": "0644",
+      "size": 35960,
+      "sha256": "9f71b135ea795664c3ab0ea16f291324e5b3aaecb206cfc23a49dbb0a1c432db"
+    },
+    {
+      "path": "lib64/arm64/libnativewindow.so",
+      "mode": "0644",
+      "size": 36184,
+      "sha256": "a7389234d12a3a104588ce7201e11af3ac14c533ebad86ab1afdba6d36b97218"
+    },
+    {
+      "path": "lib64/arm64/libneuralnetworks.so",
+      "mode": "0644",
+      "size": 36232,
+      "sha256": "020e5deb973c1fa716495afe14c6bb9b1f56e570949099bddcb3c0f1d065935c"
+    },
+    {
+      "path": "lib64/arm64/libpng.so",
+      "mode": "0644",
+      "size": 251208,
+      "sha256": "782631b3369e23b6ecdea58e9f207b11099070d08076db702f8098b30b1e4002"
+    },
+    {
+      "path": "lib64/arm64/libsqlite.so",
+      "mode": "0644",
+      "size": 1930416,
+      "sha256": "126f97fd7ed9faef973dc44c6196595c371e01f880e2878d6fed92b6bea9aa77"
+    },
+    {
+      "path": "lib64/arm64/libssl.so",
+      "mode": "0644",
+      "size": 455880,
+      "sha256": "d8a2b5e2a39235ed5fc2c72268d2f9cc065ad14ccbe7dabe5b0ffa9087cf28e9"
+    },
+    {
+      "path": "lib64/arm64/libstdc++.so",
+      "mode": "0644",
+      "size": 51608,
+      "sha256": "312feedfd2ed254eac0c18df94a14029c95c41ba9635ce8050cd560e10460b6f"
+    },
+    {
+      "path": "lib64/arm64/libsync.so",
+      "mode": "0644",
+      "size": 51232,
+      "sha256": "a75486a04f30331d32c16fe49d4493c51476e8a7be0cd390de9213e07d794186"
+    },
+    {
+      "path": "lib64/arm64/libunwindstack.so",
+      "mode": "0644",
+      "size": 722848,
+      "sha256": "116d633016d41115654a833d58ccfb3e7e11364864a8e588fedd1af8fc61cf57"
+    },
+    {
+      "path": "lib64/arm64/libutils.so",
+      "mode": "0644",
+      "size": 151792,
+      "sha256": "f231ef8701b9ae7e2571be5d95568228aaf58934fa778f3811b70f204c08e1e5"
+    },
+    {
+      "path": "lib64/arm64/libutilscallstack.so",
+      "mode": "0644",
+      "size": 52032,
+      "sha256": "f2f2b32546cf75b8b4149a7e33c24e9575f7db497bbf4a84031d43df13d05a3a"
+    },
+    {
+      "path": "lib64/arm64/libvndksupport.so",
+      "mode": "0644",
+      "size": 51352,
+      "sha256": "7b843c18ccaeca1304dd14df0d3a8c637925a9fc768e4c0422f934b42910c574"
+    },
+    {
+      "path": "lib64/arm64/libvulkan.so",
+      "mode": "0644",
+      "size": 70272,
+      "sha256": "8ac89084771ba67cd1a578ba4a70ca7670ad66a34e0cd13b253075ea46f0ec85"
+    },
+    {
+      "path": "lib64/arm64/libwebviewchromium_plat_support.so",
+      "mode": "0644",
+      "size": 35712,
+      "sha256": "deda453c71da9829c1dbd9967ef7f83bc28fd9f1f8828b11829845578faf21c8"
+    },
+    {
+      "path": "lib64/arm64/libz.so",
+      "mode": "0644",
+      "size": 117480,
+      "sha256": "a34363d3751750ca0f3fcac4461881f55db99a6bd6866a3f01a2eaaa9f55f001"
+    },
+    {
+      "path": "lib64/libberberis_exec_region.so",
+      "mode": "0644",
+      "size": 575320,
+      "sha256": "3d8eec7630197453c1f7a5865359812fa31d30fc6581e2542d50968052b78bd9"
+    },
+    {
+      "path": "lib64/libndk_translation.so",
+      "mode": "0644",
+      "size": 3612288,
+      "sha256": "9b5808354a85d722a290ae879400b909aa961955e80ea1a7e807aea9416d92f9"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libEGL.so",
+      "mode": "0644",
+      "size": 475984,
+      "sha256": "c3a57d573c61afcaaf4a6486438a67a8086e12253e49990c920c3a8fcc800b0f"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libGLESv1_CM.so",
+      "mode": "0644",
+      "size": 52152,
+      "sha256": "47b014e70781ad484ce49caf0776d2b27fd6fbbb4dd0988d637d8a74f3ef9279"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libGLESv2.so",
+      "mode": "0644",
+      "size": 86208,
+      "sha256": "618f5de57b69d702f4576444106052b26bbd2532914e165febcb7ef1b1b62c2a"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libGLESv3.so",
+      "mode": "0644",
+      "size": 86208,
+      "sha256": "770290dedaa6789511b317659a4550ccf57d4aebc58d546e8947360bebc8e0f8"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libOpenMAXAL.so",
+      "mode": "0644",
+      "size": 52384,
+      "sha256": "38f51c297e4ddfc8354a0d0b71aaa5b64391086810d9dbd2dd64ca546c191a8c"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libOpenSLES.so",
+      "mode": "0644",
+      "size": 87888,
+      "sha256": "8007637a17be40a6b8b56b5e6567c5e1c929b6be45e945c16966179cf23e09f3"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libaaudio.so",
+      "mode": "0644",
+      "size": 51800,
+      "sha256": "0dff2dee127a35b25a0c69c2f26d59ebbe1e0cb8ed79a50d8b6eb9ef85d9205c"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libamidi.so",
+      "mode": "0644",
+      "size": 51712,
+      "sha256": "3066791a2a5ce89f1d52c74dfdce8fed8efa63577e9a9b26fa959d639f8194f0"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libandroid.so",
+      "mode": "0644",
+      "size": 69016,
+      "sha256": "e2ec03eb1ee5bc17bf34c36c672ae4118c20e261d4c61b2781f1181d198cfef2"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libandroid_runtime.so",
+      "mode": "0644",
+      "size": 133568,
+      "sha256": "cb024e9e6fe97a9ddf5c84628205fcf3fb352abcee6cb29a44b200699b932876"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libbinder_ndk.so",
+      "mode": "0644",
+      "size": 52184,
+      "sha256": "3d9f27510a033412cf2bde9d2e295c71dd8734acb3ae868c8a202457051ff42b"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libc.so",
+      "mode": "0644",
+      "size": 68760,
+      "sha256": "c49d1c45b9e111ca44f9645ae2d88a9b955e7cf5c8fe7ef17c34f61604848984"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libcamera2ndk.so",
+      "mode": "0644",
+      "size": 52280,
+      "sha256": "19e3cdb7e61bdd00a8fb938571437a1688003bc0d49fd2c967fac23f4fc669e1"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libjnigraphics.so",
+      "mode": "0644",
+      "size": 51880,
+      "sha256": "fedc207f4287118ef6be35224436146b8355b366341a0455fc02cc16cf2cce45"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libmediandk.so",
+      "mode": "0644",
+      "size": 68752,
+      "sha256": "32ae2e99c251e4eaed2657e48968c1804fe80e51a472476e7bda4d5ea1559950"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libnativehelper.so",
+      "mode": "0644",
+      "size": 51824,
+      "sha256": "fa479f0960ba248ce9bfb475185bdcebb06ca4169da0146ad1056282fbd7d605"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libnativewindow.so",
+      "mode": "0644",
+      "size": 51896,
+      "sha256": "09f4e0f315f92abbc0493e2548562b570aaa50c34c831fb0d84501a6e5371ebd"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libneuralnetworks.so",
+      "mode": "0644",
+      "size": 51840,
+      "sha256": "8732303dc4b42ea72e0b99302df448d21b6acb087ca89cc00ac9a2e1043a163b"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libvulkan.so",
+      "mode": "0644",
+      "size": 829976,
+      "sha256": "686d3481b43d323590eaebb396b2ee247a5be2ead71a83e26fda4cd39e855058"
+    },
+    {
+      "path": "lib64/libndk_translation_proxy_libwebviewchromium_plat_support.so",
+      "mode": "0644",
+      "size": 51520,
+      "sha256": "5f2cd584dba17f4a01f08f676392f38417c7a2e9893396724f561a473b5b992a"
+    }
+  ],
+  "extracted_at": "2026-10-27T16:35:56.275149+00:00",
+  "redistribution": "forbidden; local build only"
+}

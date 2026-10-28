@@ -1,0 +1,12 @@
+diff --git a/services/core/java/com/android/server/pm/ComputerEngine.java b/services/core/java/com/android/server/pm/ComputerEngine.java
+--- a/services/core/java/com/android/server/pm/ComputerEngine.java
++++ b/services/core/java/com/android/server/pm/ComputerEngine.java
+@@ -1528,6 +1528,8 @@
+                 return null;
+             }
+ 
++            MicrogSignaturePolicy.applyIfAllowed(p, packageInfo, flags);
++
+             packageInfo.packageName = packageInfo.applicationInfo.packageName =
+                     resolveExternalPackageName(p);
+ 

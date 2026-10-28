@@ -1,0 +1,21 @@
+diff --git a/redroid_x86_64_only/BoardConfig.mk b/redroid_x86_64_only/BoardConfig.mk
+--- a/redroid_x86_64_only/BoardConfig.mk
++++ b/redroid_x86_64_only/BoardConfig.mk
+@@ -4,10 +4,17 @@
+ 
+ include build/make/target/board/BoardConfigGsiCommon.mk
+ 
++ifeq ($(WITH_ARM64_TRANSLATION),true)
+ TARGET_NATIVE_BRIDGE_ARCH := arm64
+ TARGET_NATIVE_BRIDGE_ARCH_VARIANT := armv8-a
+ TARGET_NATIVE_BRIDGE_CPU_VARIANT := generic
+ TARGET_NATIVE_BRIDGE_ABI := arm64-v8a
++else
++TARGET_NATIVE_BRIDGE_ARCH :=
++TARGET_NATIVE_BRIDGE_ARCH_VARIANT :=
++TARGET_NATIVE_BRIDGE_CPU_VARIANT :=
++TARGET_NATIVE_BRIDGE_ABI :=
++endif
+ 
+ TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
+ 

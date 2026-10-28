@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-10-27T23:41:48.673517+09:00",
+  "source": {
+    "url": "https://github.com/remote-android/gbm_gralloc.git",
+    "commit": "a8874a18ad7884ea713f45047efad080fe973712"
+  },
+  "baseline_prebuilt": {
+    "project_commit": "6248d6a71db7222d1b1c4545b90e3850dffca55f",
+    "last_binary_update_commit": "bec3d5bb5da01b99ee458807dfc27eb998984d1c",
+    "blob": "ab0df068c906261230b2aefa78181b200f112d96",
+    "sha256": "f06f7b2e6d84d3a8f81a91b32d1227c0f3cf6d2cd997ddfbdf399e796b731621"
+  },
+  "patches": [
+    {
+      "file": "patches/gralloc/0001-preserve-redroid-map-stride.patch",
+      "sha256": "298bbe373052d7a48c023aa8bc6e30994e40d76e51998391a01ba0800606b5ab"
+    },
+    {
+      "file": "patches/gralloc/0002-reject-unsupported-allocation-formats.patch",
+      "sha256": "18dcf54890597297cdb5ec3a82e206271304848e1edcae9fc8d2181778321fd5"
+    }
+  ],
+  "map_stride_patch_origin": "bec3d5bb5da01b99ee458807dfc27eb998984d1c",
+  "aosp_integration_status": "applied",
+  "target_compile_status": "passed",
+  "regression_status": "baseline_crash_reproduced",
+  "actual_trigger": {
+    "format": "YCBCR_P010",
+    "format_value": 54,
+    "width": 4,
+    "height": 4,
+    "usage": 2354
+  },
+  "build_constraints": {
+    "upstream_make_dependency": "libgbm_mesa",
+    "available_vendor_gbm_module": "libgbm.so.1",
+    "gralloc_handle_header": "external/libdrm/android/gralloc_handle.h",
+    "gbm_header": "external/mesa3d/src/gbm/main/gbm.h",
+    "existing_module": "gralloc.gbm",
+    "proposed_source_module": "gralloc.gbm.custom"
+  },
+  "target_build_run_id": "20261027T151436514402Z",
+  "source_module": "gralloc.gbm"
+}
