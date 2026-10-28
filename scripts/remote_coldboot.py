@@ -78,7 +78,8 @@ def remove_own_container():
 def firefox_check(root, label, install):
     result = {}
     if install:
-        output = run(ADB + ['install', str(root / 'apks/fenix-159.0.multi.android-arm64-v8a.apk')], timeout=300)
+        # 이미지에 기본 설치된 x86_64 Firefox의 versionCode가 더 높으므로 다운그레이드 업데이트로 설치합니다(userdebug).
+        output = run(ADB + ['install', '-r', '-d', str(root / 'apks/fenix-159.0.multi.android-arm64-v8a.apk')], timeout=300)
         result['install'] = 'Success' in output.stdout
     else:
         result['install'] = FIREFOX in shell('pm', 'list', 'packages', FIREFOX)

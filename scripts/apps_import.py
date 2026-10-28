@@ -21,6 +21,9 @@ APPS = {
                                     license='LGPL-2.1 및 포함 엔진별 고지 참조', source='https://github.com/fcitx5-android/fcitx5-android'),
     'org.fcitx.fcitx5.android.plugin.hangul': dict(module='CustomFcitx5Hangul', signer='e4db1e9edff13629d07de4bbf8165fe9bd8557ab55092672da8e40dbe484ecd7',
                                                 license='프로젝트 LICENSE 및 포함 엔진별 고지 참조', source='https://github.com/fcitx5-android/fcitx5-android/tree/master/plugin/hangul'),
+    # x86_64 APK를 씁니다. ARM64 번역 시험은 같은 서명의 ARM64 APK를 업데이트로 설치합니다.
+    'org.mozilla.firefox': dict(module='CustomFirefox', signer='a78b62a5165b4494b2fead9e76a280d22d937fee6251aece599446b2ea319b04',
+                                license='MPL-2.0', source='https://archive.mozilla.org/pub/fenix/releases/'),
 }
 
 
@@ -107,7 +110,7 @@ def main():
                 validate_app(app)
                 apps.append(app)
             require(len(apps) == len(APPS) and {app['package'] for app in apps} == set(APPS),
-                'Lawnchair, Fcitx5 본체, Hangul 플러그인 APK가 각각 하나씩 필요합니다.')
+                'Lawnchair, Fcitx5 본체, Hangul 플러그인, Firefox APK가 각각 하나씩 필요합니다.')
             validate_fcitx_pair(apps)
             lock = dict(schema_version=1, apps=apps, recorded_at=datetime.now(timezone.utc).isoformat())
             write_json(LOCK, lock)

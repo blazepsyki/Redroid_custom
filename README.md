@@ -6,7 +6,7 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 - ARM64 앱 실행(Android SDK API 35의 `libndk_translation`)
 - 공식 microG 인증서 전용 Signature Spoofing
 - microG Services와 Google Play 스토어 기본 탑재
-- 사용자 제공 Lawnchair와 Fcitx5·Hangul 플러그인 APK 기본 탑재
+- 사용자 제공 Lawnchair, Fcitx5·Hangul 플러그인, Firefox(x86_64) APK 기본 탑재
 
 요구사항은 [개발 명세서](docs/DEVELOPMENT.md)에 있습니다. 최신 결과는 [최종 보고서](docs/reports/final.md)에, 검증 경과와 Play 스토어 사용 절차는 [최종 검증 보고서](docs/reports/final-validation.md)에 있습니다. 24~72시간 방치 시험과 Google 계정이 필요한 시험(로그인 유지·FCM·Play 스토어 앱 설치)은 아직 수행하지 않았습니다.
 
@@ -21,7 +21,7 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 | `manifests/redroid.xml` | 고정한 redroid local manifest |
 | `docker/Dockerfile.builder` | AOSP 빌드 컨테이너 |
 | `tests/` | 자동화 단위 테스트, microG 정책 Java 시험, ARM64 직접 실행 시험 프로그램 |
-| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `apks/`(Lawnchair, Fcitx5·Hangul 플러그인), `test-apks/`(ARM64 Firefox) |
+| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `apks/`(Lawnchair, Fcitx5·Hangul 플러그인, Firefox), `test-apks/`(ARM64 Firefox) |
 | `dist/` (Git 제외) | 이미지 패키지 `a15-r36-custom-<package_id>/`와 SBOM·라이선스 묶음 `report-<package_id>/` |
 | `build-logs/` (Git 제외) | 빌드·패키지·SBOM 상태 파일과 실행 검증 증거 |
 | `docs/` | [개발 명세서](docs/DEVELOPMENT.md), 최종 보고서, [패치 적용 안내](docs/patching.md) |
@@ -54,7 +54,7 @@ AOSP 소스와 빌드 출력은 `config/build.env`의 `REDROID_SOURCE_DIR`에 �
 
    `00-preflight.sh`는 디렉터리를 자동 생성하지 않으며, Linux에 할당된 RAM 64GB 이상, 소스 파일시스템의 여유 공간 400GB 이상을 요구합니다. `REDROID_BACKING_DIR`을 설정하면 해당 드라이브의 여유 공간도 400GB 이상이어야 합니다.
 
-3. **입력 파일:** 원본 입력은 Git에서 제외하고, 빌드용 APK와 SDK archive의 해시는 `config/`에 고정합니다. GmsCore·Play 스토어 APK와 추출한 번역기 일부는 개인용 이미지에 포함하며, Firefox는 시험에만 사용합니다.
+3. **입력 파일:** 원본 입력은 Git에서 제외하고, 빌드용 APK와 SDK archive의 해시는 `config/`에 고정합니다. GmsCore·Play 스토어 APK와 추출한 번역기 일부는 개인용 이미지에 포함합니다. ARM64 Firefox는 번역 시험에만 사용합니다.
 
    | 파일 | 위치 | 고정 기록 |
    |---|---|---|
@@ -63,8 +63,11 @@ AOSP 소스와 빌드 출력은 `config/build.env`의 `REDROID_SOURCE_DIR`에 �
    | Lawnchair `Lawnchair.15.0.0.Beta.3.0.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Fcitx5 `org.fcitx.fcitx5.android-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Hangul 플러그인 `org.fcitx.fcitx5.android.plugin.hangul-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
+   | Firefox `fenix-159.0.multi.android-x86_64.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Android SDK `x86_64-35_r09.zip`(약 1.7GB) | WSL `~/.cache/custom-redroid/nativebridge/` | `config/nativebridge-lock.json` |
    | 시험용 `fenix-159.0.multi.android-arm64-v8a.apk` | `inputs/test-apks/` | 이미지에 넣지 않음 |
+
+   Firefox APK는 `https://archive.mozilla.org/pub/fenix/releases/159.0/android/`에서 받습니다. x86_64와 ARM64 APK 모두 같은 Mozilla 서명이어야 합니다.
 
    SDK archive는 `https://dl.google.com/android/repository/sys-img/google_apis/x86_64-35_r09.zip`에서 받습니다. Android SDK 라이선스 동의가 필요합니다.
 
@@ -114,7 +117,7 @@ bash scripts/06-build.sh --custom --sbom
   python3 scripts/microg_import.py
   ```
 
-- **기본 설치 APK 교체:** `inputs/apks/`에 세 패키지의 APK를 하나씩 두고 `python3 scripts/apps_import.py`로 패키지·서명·버전·ABI·SHA-256을 검사합니다. 원본 바이트를 그대로 `/system/app/CustomLawnchair/`, `/system/app/CustomFcitx5/`, `/system/app/CustomFcitx5Hangul/`에 설치하며 추가 privileged 권한은 부여하지 않습니다. 압축·정렬 상태를 검사해 필요한 APK에만 Soong 검사 예외를 적용합니다. 기존 `apps-lock.json`과 동일한 입력으로 처음 빌드할 때는 import를 다시 할 필요가 없습니다. 기본 런처·입력기와 언어 선택은 사용자 설정으로 유지합니다.
+- **기본 설치 APK 교체:** `inputs/apks/`에 네 패키지의 APK를 하나씩 두고 `python3 scripts/apps_import.py`로 패키지·서명·버전·ABI·SHA-256을 검사합니다. 원본 바이트를 그대로 `/system/app/CustomLawnchair/`, `/system/app/CustomFcitx5/`, `/system/app/CustomFcitx5Hangul/`, `/system/app/CustomFirefox/`에 설치하며 추가 privileged 권한은 부여하지 않습니다. 압축·정렬 상태를 검사해 필요한 APK에만 Soong 검사 예외를 적용합니다. 기존 `apps-lock.json`과 동일한 입력으로 처음 빌드할 때는 import를 다시 할 필요가 없습니다. 기본 런처·입력기와 언어 선택은 사용자 설정으로 유지합니다.
 
 ## 구성 요점
 

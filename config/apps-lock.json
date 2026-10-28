@@ -92,6 +92,162 @@
       "native_files": []
     },
     {
+      "package": "org.mozilla.firefox",
+      "version_code": 2016191886,
+      "version_name": "159.0",
+      "signers": [
+        "a78b62a5165b4494b2fead9e76a280d22d937fee6251aece599446b2ea319b04"
+      ],
+      "lineage": [],
+      "schemes": [
+        "v2"
+      ],
+      "requested_permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_LOCAL_NETWORK",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS",
+        "android.permission.CREDENTIAL_MANAGER_SET_ORIGIN",
+        "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_DATA_SYNC",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+        "android.permission.INTERNET",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.QUERY_ALL_PACKAGES",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.REQUEST_DELETE_PACKAGES",
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.VIBRATE",
+        "android.permission.WAKE_LOCK",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "com.adjust.preinstall.READ_PERMISSION",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+        "com.google.android.gms.permission.AD_ID",
+        "org.mozilla.firefox.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+        "org.mozilla.firefox.permission.PROFILER_INTERNAL",
+        "org.mozilla.firefox.permission.RECEIVE_DOWNLOAD_BROADCAST"
+      ],
+      "module": "CustomFirefox",
+      "privileged": false,
+      "file": "fenix-159.0.multi.android-x86_64.apk",
+      "sha256": "1be332f07cb28ff8e110b8e7cf6f6415cf24c38ceff1cea18ce14867db927368",
+      "size": 139112475,
+      "abis": [
+        "x86_64"
+      ],
+      "license": "MPL-2.0",
+      "source": "https://archive.mozilla.org/pub/fenix/releases/",
+      "provenance": "user-supplied",
+      "skip_preprocessed_apk_checks": true,
+      "min_sdk": 26,
+      "target_sdk": 37,
+      "extract_native_libs": true,
+      "native_files": [
+        {
+          "member": "lib/x86_64/libandroidx.graphics.path.so",
+          "sha256": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+          "size": 10760
+        },
+        {
+          "member": "lib/x86_64/libclearkey.so",
+          "sha256": "87e127fcdc45149bb624288c57716765308ba6bc66fb39d46e4a27a1bd467d3b",
+          "size": 131472
+        },
+        {
+          "member": "lib/x86_64/libcrashhelper.so",
+          "sha256": "669fbbcbf99ba99e8de0ec972045d1ad1e3130e9e777490fc6b9786558afe7c1",
+          "size": 3744040
+        },
+        {
+          "member": "lib/x86_64/libcrashtools.so",
+          "sha256": "108eed0c13eea352684adedee7f3eaa5a6f3475f1f8ad8a9b67a2288ee984c4a",
+          "size": 6452176
+        },
+        {
+          "member": "lib/x86_64/libdatastore_shared_counter.so",
+          "sha256": "c3973140a0e6144a83e7dd7ee3c4e161f42181591feda254e12c8395d3bbacd0",
+          "size": 9424
+        },
+        {
+          "member": "lib/x86_64/libfreebl3.so",
+          "sha256": "77b5e1b4ce3375c1ef637e40d19d9a341ec17206478df2dd829b0c2484e6c87d",
+          "size": 1237432
+        },
+        {
+          "member": "lib/x86_64/libgkcodecs.so",
+          "sha256": "9e0df7a150deb6306845abd8b829472daacf85af9b148c8dfa13c85ebef4b3f6",
+          "size": 8225352
+        },
+        {
+          "member": "lib/x86_64/libjnidispatch.so",
+          "sha256": "3809247e9b804a05ed8377b87d545cf5b5e97f960f75e725bc8497b40260e417",
+          "size": 126912
+        },
+        {
+          "member": "lib/x86_64/liblgpllibs.so",
+          "sha256": "4ae2e76593f1768f73d007980211bef93f8926745d3c5c479847776cedd5190f",
+          "size": 171264
+        },
+        {
+          "member": "lib/x86_64/libmegazord.so",
+          "sha256": "9c90e4f38997e3e5953910e38f85ff7c451da18d9a417795e5f322c6ca8d3d8a",
+          "size": 23571184
+        },
+        {
+          "member": "lib/x86_64/libmozavcodec.so",
+          "sha256": "f731a1ffebaf853b5c41494168d33548a8617eaba0f10868f2c098d10bf038eb",
+          "size": 3860080
+        },
+        {
+          "member": "lib/x86_64/libmozavutil.so",
+          "sha256": "a85913816ddc056a877ced2953c0b3c8953ab9639679e2a4a2d4348a570bb5c8",
+          "size": 586600
+        },
+        {
+          "member": "lib/x86_64/libmozglue.so",
+          "sha256": "b101a091d1cfde9ade4f6fd8265b584da5059aea9a1bb6a32e2fd0ccad95b04f",
+          "size": 1185768
+        },
+        {
+          "member": "lib/x86_64/libnss3.so",
+          "sha256": "1a8d6bf37ff7272901f86b337e887a9430d4ff5292daa5ecf2beef69b87e562d",
+          "size": 3010296
+        },
+        {
+          "member": "lib/x86_64/libplugin-container.so",
+          "sha256": "35f699c113225a4afb3db04f7bc226c0f842a25408c33fc308ccc60808b9ac5d",
+          "size": 4696
+        },
+        {
+          "member": "lib/x86_64/libsigner.so",
+          "sha256": "a411f881e0809de7ce4e421e726a5c3f0d0e4d81ecf64ca11a32928aed49fcd0",
+          "size": 1289760
+        },
+        {
+          "member": "lib/x86_64/libsoftokn3.so",
+          "sha256": "e73ec17a8c1c89d5aa3506436816c403808597c8cd37555963e936301519b6a0",
+          "size": 360440
+        },
+        {
+          "member": "lib/x86_64/libxul.so",
+          "sha256": "0652a663229900326e3adb8da624c869821510e44baa398bd31561749e8a1532",
+          "size": 167470272
+        }
+      ]
+    },
+    {
       "package": "org.fcitx.fcitx5.android",
       "version_code": 114,
       "version_name": "0.1.3-0-g048f581c",
@@ -285,5 +441,5 @@
       ]
     }
   ],
-  "recorded_at": "2026-10-28T06:23:05.162655+00:00"
+  "recorded_at": "2026-10-28T13:40:32.365298+00:00"
 }

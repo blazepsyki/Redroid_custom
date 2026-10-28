@@ -25,7 +25,7 @@ class PreinstalledAppTests(unittest.TestCase):
             (self.root / filename).write_bytes(data)
             self.apps.append(dict(package=package, module=expected['module'], signers=[expected['signer']],
                                   privileged=False, file=filename, sha256=hashlib.sha256(data).hexdigest(),
-                                  skip_preprocessed_apk_checks=bool(index), version_code=114, version_name='fixture', min_sdk=23,
+                                  skip_preprocessed_apk_checks=index % 2 == 1, version_code=114, version_name='fixture', min_sdk=23,
                                   extract_native_libs=False, native_files=[]))
         self.lock = self.root / 'apps-lock.json'
         self.save()
@@ -38,9 +38,9 @@ class PreinstalledAppTests(unittest.TestCase):
     def test_original_apks_generate_unprivileged_preprocessed_modules(self):
         files = custom.app_files()
         blueprint = files['vendor/custom/apps/Android.bp'].decode()
-        self.assertEqual(blueprint.count('privileged: false'), 3)
-        self.assertEqual(blueprint.count('preprocessed: true'), 3)
-        self.assertEqual(blueprint.count('skip_preprocessed_apk_checks: true'), 2)
+        self.assertEqual(blueprint.count('privileged: false'), len(self.apps))
+        self.assertEqual(blueprint.count('preprocessed: true'), len(self.apps))
+        self.assertEqual(blueprint.count('skip_preprocessed_apk_checks: true'), len(self.apps) // 2)
         for app in self.apps:
             self.assertEqual(files[f'vendor/custom/apps/{app["module"]}.apk'], (self.root / app['file']).read_bytes())
             self.assertIn(app['module'], files['vendor/custom/apps/apps.mk'].decode())
@@ -68,7 +68,8 @@ class PreinstalledAppTests(unittest.TestCase):
             apps_import.verify_apks()
 
     def test_fcitx_plugin_version_mismatch_is_rejected(self):
-        self.apps[-1]['version_code'] += 1
+        plugin = next(app for app in self.apps if app['package'] == 'org.fcitx.fcitx5.android.plugin.hangul')
+        plugin['version_code'] += 1
         self.save()
         with self.assertRaisesRegex(PhaseError, '버전이 다릅니다'):
             apps_import.verify_apks()
