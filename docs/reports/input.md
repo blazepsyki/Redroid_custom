@@ -12,13 +12,6 @@
 
 Lawnchair는 압축·정렬 검사를 통과하므로 `skip_preprocessed_apk_checks`를 설정하지 않습니다. 다른 APK도 압축 JNI·정렬 상태를 확인해 원본 서명을 유지하는 데 필요한 검사 예외만 적용합니다. 필요하지 않은 예외를 설정하면 Soong이 빌드를 거부하므로 APK별로 판정합니다.
 
-## `--keyboard=uhid` 키 입력이 전달되지 않는 원인
-
-scrcpy가 UHID 키보드를 만들면 커널에 `/sys/class/input/eventN`이 생깁니다. 그런데 컨테이너 안에는 `/dev/input/eventN` 노드가 생기지 않아 Android EventHub가 키보드를 보지 못했습니다.
-
-- 컨테이너 안의 `ueventd`는 실행 중이고 호스트의 `/sys/class/input`도 보입니다.
-- Linux 4.18 이후 장치 uevent는 호스트의 초기 network namespace에만 전달됩니다. 컨테이너의 `ueventd`는 새 UHID 장치를 알 수 없습니다.
-- scrcpy는 연결할 때마다 UHID 장치를 새로 만들므로 event 번호도 매번 바뀝니다. 이전의 수동 도구(`remote_keyboard.py`)는 연결마다 다시 실행해야 했습니다.
 
 ## 자동 노드 관리 (`WITH_UHID_INPUT`)
 
