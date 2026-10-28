@@ -30,6 +30,7 @@
 #define MAX_EVENTS 512
 #define INPUT_MAJOR 13
 #define AID_INPUT 1004
+#define AID_UHID 3011
 
 static const char *const kNames[] = {"scrcpy", NULL};
 
@@ -184,6 +185,26 @@ static void scan(void) {
     }
 }
 
+/*
+ * Docker copies host device nodes with the host's permissions (root:root 0600). ueventd does no coldboot
+ * inside the container, so the /dev/uhid and /dev/uinput permissions from ueventd.rc are applied here.
+ * This only changes the container's own /dev (tmpfs) node, not the host's.
+ */
+static void fix_uhid_permissions(void) {
+    static const char *const kNodes[] = {"/dev/uhid", "/dev/uinput", NULL};
+    for (int i = 0; kNodes[i]; i++) {
+        struct stat status;
+        if (lstat(kNodes[i], &status) || !S_ISCHR(status.st_mode) || major(status.st_rdev) != 10) continue;
+        if (status.st_uid == AID_UHID && status.st_gid == AID_UHID && (status.st_mode & 07777) == 0660) continue;
+        /* chmod first, while still the owner (root), then chown. */
+        if (chmod(kNodes[i], 0660) || chown(kNodes[i], AID_UHID, AID_UHID)) {
+            logf_("cannot set uhid:uhid 0660 on %s: %s", kNodes[i], strerror(errno));
+        } else {
+            logf_("set %s to uhid:uhid 0660", kNodes[i]);
+        }
+    }
+}
+
 /* Delete stale nodes left by an earlier daemon or a manual connection. */
 static void remove_stale_nodes(void) {
     DIR *directory = opendir(DEV_INPUT);
@@ -216,6 +237,7 @@ int main(void) {
         logf_("cannot create " DEV_INPUT ": %s", strerror(errno));
         return 1;
     }
+    fix_uhid_permissions();
     remove_stale_nodes();
     scan();
     logf_("watching scrcpy UHID devices");

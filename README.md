@@ -173,7 +173,7 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 
 원격 화면은 `ssh -N -L 127.0.0.1:5561:127.0.0.1:5561 test-host`로 터널을 연 뒤 `adb connect 127.0.0.1:5561`, `scrcpy -s 127.0.0.1:5561`로 봅니다. 같은 호스트에서 접속하면 SSH 터널은 필요하지 않습니다.
 
-`--keyboard=uhid`에서 키가 전달되지 않으면 커널의 UHID 드라이버·권한과 컨테이너의 입력 event 노드를 구분해 검사합니다. `remote_keyboard.py`는 실행 호스트에서 명시한 scrcpy 장치 하나만 연결하며, 물리 키보드나 호스트에서 마운트한 `/dev/input`은 수정하지 않습니다. 입력기 선택과 이전 KeliBoard의 물리 키보드 한글 조합 제한, UHID 연결 절차는 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
+물리 키보드로 한글을 입력하려면 `scrcpy -s 127.0.0.1:5561 --keyboard=uhid`로 접속하고 입력기로 Fcitx5(Hangul)를 사용합니다. `WITH_UHID_INPUT`이 켜진 이미지는 컨테이너 안의 `custom_uhid_inputd`가 scrcpy UHID 키보드의 `/dev/input/eventN` 노드를 자동으로 만들고 지웁니다. 한/영 전환은 `Ctrl+Space`, 그리고 Fcitx5 단축키에 `Alt_R`을 추가한 경우 오른쪽 Alt입니다. `remote_keyboard.py`는 이 서비스가 없는 이전 이미지용 수동 대안입니다. 원인과 시험 결과, 이전 KeliBoard의 제한은 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
 
 ### microG 부정 시험 기록
 

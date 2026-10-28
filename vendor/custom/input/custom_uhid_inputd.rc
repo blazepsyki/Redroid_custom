@@ -1,8 +1,8 @@
 # Inside the container ueventd does not receive uevents, so scrcpy UHID input-device nodes are created here.
 # Group input: create nodes with root:input 0660 before EventHub sees IN_CREATE.
-# Reading other processes' /proc/<pid>/fd needs SYS_PTRACE; mknod needs MKNOD.
+# Reading other processes' /proc/<pid>/fd needs SYS_PTRACE; mknod needs MKNOD; changing /dev/uhid ownership needs CHOWN.
 service custom_uhid_inputd /vendor/bin/custom_uhid_inputd
     class main
     user root
     group input
-    capabilities MKNOD SYS_PTRACE DAC_READ_SEARCH
+    capabilities MKNOD SYS_PTRACE DAC_READ_SEARCH CHOWN

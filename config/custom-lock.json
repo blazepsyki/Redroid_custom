@@ -57,8 +57,8 @@
     "vendor/custom/gralloc/source/gralloc_gbm.cpp": "40a576ac45f6d077de17fd66625f5b0a8bcb056a764cb896e6f4cdd662325512",
     "vendor/custom/gralloc/source/gralloc_gbm_priv.h": "6f3a1190508598fd14bcc90e3719e93cb9b37562443a71ea53b7f89a8c2e92e7",
     "vendor/custom/input/Android.bp": "137156806c24e698bdfb425e626e9aed24048b131aec8d57e20629d0f4744e30",
-    "vendor/custom/input/custom_uhid_inputd.rc": "6e2bd7c894ae6a9859e09e05a5d1f61049baca779fa8275ea3700d85bbbc9844",
-    "vendor/custom/input/uhid_inputd.c": "622252ef1076e6c8cd7108af1efd7f839033f72095379df74d72c7984856ff1e",
+    "vendor/custom/input/custom_uhid_inputd.rc": "9e1562508a8ed7363599fa88d5c30da3e88f94e426a3a0020796be7fab174ae4",
+    "vendor/custom/input/uhid_inputd.c": "4ceea67de739441fa9a0828ff0c90be50f812fe5ddf7198b08f9e5cb652dd066",
     "vendor/custom/microg/Android.bp": "0b5e589277551b8d7cf295a300f2e07a4264b1e1d409d8a07f8fbf22a5f69e3f",
     "vendor/custom/microg/GmsCore.apk": "e5e6cba078bdec812b5450599350e5c1a12c8b7438da5bf77123af170f8c1a35",
     "vendor/custom/microg/Phonesky.apk": "d284a0719ce11e98576fc8215f0ad0a6b7ffbc1bf874d9f895e05cb00ba96384",
@@ -101,7 +101,7 @@
     "device/redroid/redroid_x86_64_only/device.mk": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30",
     "build/make/core/sysprop.mk": "748deedbda9a0181810229ad848311096b060ec0ebe724e5686057f8844d9000"
   },
-  "plan_sha256": "e387c69f220ba7bfd386ffb4388f8c29253416952d0ec880888e539c191e1389",
+  "plan_sha256": "4c7c901355cd1684f3f626b92e09e15e99e74ed170e508a2157293f5f6aaadc8",
   "gralloc_source": {
     "url": "https://github.com/remote-android/gbm_gralloc.git",
     "commit": "a8874a18ad7884ea713f45047efad080fe973712"
@@ -149,5 +149,5 @@
     }
   ],
   "status": "applied",
-  "recorded_at": "2026-10-28T06:24:05.720547+00:00"
+  "recorded_at": "2026-10-28T06:48:19.685450+00:00"
 }
