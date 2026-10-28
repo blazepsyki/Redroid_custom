@@ -17,12 +17,13 @@
     "frameworks/base/services/core/java/com/android/server/pm/MicrogSignaturePolicy.java": "36fb83155ef1373b174cd79deaa42f87036198be128e7a7f4bcd115009ceb5e8",
     "frameworks/base/services/tests/servicestests/src/com/android/server/pm/MicrogSignaturePolicyTest.java": "ed2ae11c1e4b5464e3a0341437a86799401741e00bb28538bbeef23ef42b54fc",
     "product.mk": "daa908d148af6531a1cf2bfe8d4da339c5196cbe256dd909cdcce92331cc826b",
-    "vendor/custom/apps/Android.bp": "ddb5c0749fa6cb922a1891efb6ce74d884385903f49c5217d900e9cece7b57d5",
-    "vendor/custom/apps/Android.mk": "c68cd22f7375e4ebfff4665426198c07d20b09726d0e0aa0705746090d25d1d1",
+    "vendor/custom/apps/Android.bp": "49750a7d13c37703562ef766a7f1bad13669d8e5aa14bfd8202138f9436fb975",
+    "vendor/custom/apps/Android.mk": "2a254a944011960d68e0866300b56f4cf6bf10f433e1859df9a3702eb68b8c71",
     "vendor/custom/apps/CustomFcitx5.apk": "aaeb569fc3e9e8ec532b0ea33be39ce77b143c8add824d172f17356ddc3b9ed2",
     "vendor/custom/apps/CustomFcitx5Hangul.apk": "d8e8facd48fd6898e3f0b81723b38a25e94eb8667926ca61f2171ea253460a1b",
+    "vendor/custom/apps/CustomFirefox.apk": "1be332f07cb28ff8e110b8e7cf6f6415cf24c38ceff1cea18ce14867db927368",
     "vendor/custom/apps/CustomLawnchair.apk": "d4200d0985169fd79ba1bd225d653f2a2fe7b50aa07cb0d05ca64c7623f86059",
-    "vendor/custom/apps/apps.mk": "446abc2cfe57a49b925b2eeb40cc845528b6edc5c2929fdb50cb93dcb9f97a71",
+    "vendor/custom/apps/apps.mk": "19011a2866129378f995e8c23509f5f45aec9f6a091f5215937a0b3c71e4d7d8",
     "vendor/custom/apps/native/CustomFcitx5/libFcitx5Config.so": "17bf54a09dcf28feb848af00271fde0cb7bebdac23c088a92f352a77e14a3892",
     "vendor/custom/apps/native/CustomFcitx5/libFcitx5Core.so": "8d397e1e57fef2047330797007d3f31face20d4a05ae8eaafbb3c47206750934",
     "vendor/custom/apps/native/CustomFcitx5/libFcitx5Utils.so": "b97607c4aec9d06823367149206e55aa6e2b0da3f66f093c77095b126db56c4d",
@@ -48,6 +49,24 @@
     "vendor/custom/apps/native/CustomFcitx5/libtable.so": "aa64019a63b775793b7cfe46d0fa6cde1bc9f82b375d277481389c9a5c9816b8",
     "vendor/custom/apps/native/CustomFcitx5/libunicode.so": "d644e7338225b1c6c10e1a612167a80b8eb00ee3cf64066414d7764343de50cc",
     "vendor/custom/apps/native/CustomFcitx5Hangul/libhangul.so": "4effb8aa7e22d5f04c819f4a659c63439fdc553d0e5a06be9a2b6c421544cb0a",
+    "vendor/custom/apps/native/CustomFirefox/libandroidx.graphics.path.so": "4e56c996f13670e70082658de7880c4020eabf4f25e43387f88ed78a713fc9f0",
+    "vendor/custom/apps/native/CustomFirefox/libclearkey.so": "87e127fcdc45149bb624288c57716765308ba6bc66fb39d46e4a27a1bd467d3b",
+    "vendor/custom/apps/native/CustomFirefox/libcrashhelper.so": "669fbbcbf99ba99e8de0ec972045d1ad1e3130e9e777490fc6b9786558afe7c1",
+    "vendor/custom/apps/native/CustomFirefox/libcrashtools.so": "108eed0c13eea352684adedee7f3eaa5a6f3475f1f8ad8a9b67a2288ee984c4a",
+    "vendor/custom/apps/native/CustomFirefox/libdatastore_shared_counter.so": "c3973140a0e6144a83e7dd7ee3c4e161f42181591feda254e12c8395d3bbacd0",
+    "vendor/custom/apps/native/CustomFirefox/libfreebl3.so": "77b5e1b4ce3375c1ef637e40d19d9a341ec17206478df2dd829b0c2484e6c87d",
+    "vendor/custom/apps/native/CustomFirefox/libgkcodecs.so": "9e0df7a150deb6306845abd8b829472daacf85af9b148c8dfa13c85ebef4b3f6",
+    "vendor/custom/apps/native/CustomFirefox/libjnidispatch.so": "3809247e9b804a05ed8377b87d545cf5b5e97f960f75e725bc8497b40260e417",
+    "vendor/custom/apps/native/CustomFirefox/liblgpllibs.so": "4ae2e76593f1768f73d007980211bef93f8926745d3c5c479847776cedd5190f",
+    "vendor/custom/apps/native/CustomFirefox/libmegazord.so": "9c90e4f38997e3e5953910e38f85ff7c451da18d9a417795e5f322c6ca8d3d8a",
+    "vendor/custom/apps/native/CustomFirefox/libmozavcodec.so": "f731a1ffebaf853b5c41494168d33548a8617eaba0f10868f2c098d10bf038eb",
+    "vendor/custom/apps/native/CustomFirefox/libmozavutil.so": "a85913816ddc056a877ced2953c0b3c8953ab9639679e2a4a2d4348a570bb5c8",
+    "vendor/custom/apps/native/CustomFirefox/libmozglue.so": "b101a091d1cfde9ade4f6fd8265b584da5059aea9a1bb6a32e2fd0ccad95b04f",
+    "vendor/custom/apps/native/CustomFirefox/libnss3.so": "1a8d6bf37ff7272901f86b337e887a9430d4ff5292daa5ecf2beef69b87e562d",
+    "vendor/custom/apps/native/CustomFirefox/libplugin-container.so": "35f699c113225a4afb3db04f7bc226c0f842a25408c33fc308ccc60808b9ac5d",
+    "vendor/custom/apps/native/CustomFirefox/libsigner.so": "a411f881e0809de7ce4e421e726a5c3f0d0e4d81ecf64ca11a32928aed49fcd0",
+    "vendor/custom/apps/native/CustomFirefox/libsoftokn3.so": "e73ec17a8c1c89d5aa3506436816c403808597c8cd37555963e936301519b6a0",
+    "vendor/custom/apps/native/CustomFirefox/libxul.so": "0652a663229900326e3adb8da624c869821510e44baa398bd31561749e8a1532",
     "vendor/custom/custom.mk": "988d7768edc3fe38db3813825940b3c991e950e3348b8f84b130c1dae75d4314",
     "vendor/custom/features.mk": "d601bba5952165fed4a6ec835ab4bdc3f3ebe4b27fc74a508ff6aabc07c84687",
     "vendor/custom/gralloc/Android.mk": "e51e7e471a595ffa0afbe96cadda0ee4d6275c4e57fc525de4a0b4bf3729011f",
@@ -101,7 +120,7 @@
     "device/redroid/redroid_x86_64_only/device.mk": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30",
     "build/make/core/sysprop.mk": "748deedbda9a0181810229ad848311096b060ec0ebe724e5686057f8844d9000"
   },
-  "plan_sha256": "4c7c901355cd1684f3f626b92e09e15e99e74ed170e508a2157293f5f6aaadc8",
+  "plan_sha256": "13996f568b063d8dfe8be29a2280d33a16153e1dc2c9e124ceafe45eae48f707",
   "gralloc_source": {
     "url": "https://github.com/remote-android/gbm_gralloc.git",
     "commit": "a8874a18ad7884ea713f45047efad080fe973712"
@@ -149,5 +168,5 @@
     }
   ],
   "status": "applied",
-  "recorded_at": "2026-10-28T06:48:19.685450+00:00"
+  "recorded_at": "2026-10-28T13:44:16.991918+00:00"
 }
