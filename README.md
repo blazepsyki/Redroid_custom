@@ -6,6 +6,7 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 - ARM64 앱 실행(Android SDK API 35의 `libndk_translation`)
 - 공식 microG 인증서 전용 Signature Spoofing
 - microG Services와 Google Play 스토어 기본 탑재
+- 사용자 제공 Lawnchair와 Fcitx5·Hangul 플러그인 APK 기본 탑재
 
 요구사항은 [개발 명세서](docs/DEVELOPMENT.md)에 있습니다. 최신 결과는 [최종 보고서](docs/reports/final.md)에, 검증 경과와 Play 스토어 사용 절차는 [최종 검증 보고서](docs/reports/final-validation.md)에 있습니다. 24~72시간 방치 시험과 Google 계정이 필요한 시험(로그인 유지·FCM·Play 스토어 앱 설치)은 아직 수행하지 않았습니다.
 
@@ -14,18 +15,22 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 | 경로 | 내용 |
 |---|---|
 | `scripts/` | 단계별 실행 스크립트(`00`~`10`)와 Python 구현 |
-| `patches/` | AOSP 프로젝트에 적용하는 custom 패치(device-redroid 3개, frameworks-base 1개, gralloc 2개) |
+| `patches/` | AOSP 프로젝트에 적용하는 custom 패치(device-redroid 3개, frameworks-base 1개, gralloc 2개, build-make 1개) |
 | `vendor/custom/` | 제품 설정, microG 서명 정책, Gralloc format 시험 도구 |
 | `config/` | 소스·패치·빌더·바이너리의 SHA 고정 기록과 기능 설정 |
 | `manifests/redroid.xml` | 고정한 redroid local manifest |
 | `docker/Dockerfile.builder` | AOSP 빌드 컨테이너 |
 | `tests/` | 자동화 단위 테스트, microG 정책 Java 시험, ARM64 직접 실행 시험 프로그램 |
-| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `test-apks/`(ARM64 Firefox) |
+| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `apks/`(Lawnchair, Fcitx5·Hangul 플러그인), `test-apks/`(ARM64 Firefox) |
 | `dist/` (Git 제외) | 이미지 패키지 `a15-r36-custom-<package_id>/`와 SBOM·라이선스 묶음 `report-<package_id>/` |
 | `build-logs/` (Git 제외) | 빌드·패키지·SBOM 상태 파일과 실행 검증 증거 |
 | `docs/` | [개발 명세서](docs/DEVELOPMENT.md), 최종 보고서, [패치 적용 안내](docs/patching.md) |
 
 AOSP 소스와 빌드 출력은 `config/build.env`의 `REDROID_SOURCE_DIR`에 둡니다. 해당 경로는 ext4 파일시스템이어야 합니다. 이 저장소는 스크립트와 설정·문서만 관리합니다. 아래 명령은 저장소 루트의 Linux 셸에서 실행하며, Windows에서는 WSL 배포판의 셸을 사용합니다.
+
+빌드 메타데이터는 `BUILD_USERNAME=redroid`, `BUILD_HOSTNAME=redroid-builder`, `BUILD_NUMBER=redroid.a15r36`으로 고정합니다. 호스트 계정명·호스트명과 외부 환경변수로 이 값을 대체하지 않습니다. 파일 쓰기 권한을 위한 UID/GID 매핑은 유지합니다. 제품 빌드와 패키징에서 `build.prop`의 사용자·호스트·incremental 번호·fingerprint를 검사하며, 패키징은 실제 rootfs archive도 다시 검사합니다. 이 검사를 통과하지 않은 기존 이미지에는 재빌드가 필요합니다.
+
+증분 빌드에서 vendor 속성만 이전 번호를 유지하지 않도록 `build/make` 패치가 vendor `build.prop` 생성 규칙에 빌드 번호·fingerprint 파일 의존성을 추가합니다. 기존 `out/`에서도 식별정보 변경이 vendor 이미지까지 반영되어야 검사를 통과합니다.
 
 ## 준비
 
@@ -55,6 +60,9 @@ AOSP 소스와 빌드 출력은 `config/build.env`의 `REDROID_SOURCE_DIR`에 �
    |---|---|---|
    | microG Services `com.google.android.gms-252432034.apk` | `inputs/microg/` | `config/microg-apk-lock.json` |
    | Play 스토어 `com.android.vending-85372340.apk` | `inputs/microg/` | `config/microg-apk-lock.json` |
+   | Lawnchair `Lawnchair.15.0.0.Beta.3.0.apk` | `inputs/apks/` | `config/apps-lock.json` |
+   | Fcitx5 `org.fcitx.fcitx5.android-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
+   | Hangul 플러그인 `org.fcitx.fcitx5.android.plugin.hangul-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Android SDK `x86_64-35_r09.zip`(약 1.7GB) | WSL `~/.cache/custom-redroid/nativebridge/` | `config/nativebridge-lock.json` |
    | 시험용 `fenix-159.0.multi.android-arm64-v8a.apk` | `inputs/test-apks/` | 이미지에 넣지 않음 |
 
@@ -106,6 +114,8 @@ bash scripts/06-build.sh --custom --sbom
   python3 scripts/microg_import.py
   ```
 
+- **기본 설치 APK 교체:** `inputs/apks/`에 세 패키지의 APK를 하나씩 두고 `python3 scripts/apps_import.py`로 패키지·서명·버전·ABI·SHA-256을 검사합니다. 원본 바이트를 그대로 `/system/app/CustomLawnchair/`, `/system/app/CustomFcitx5/`, `/system/app/CustomFcitx5Hangul/`에 설치하며 추가 privileged 권한은 부여하지 않습니다. 압축·정렬 상태를 검사해 필요한 APK에만 Soong 검사 예외를 적용합니다. 기존 `apps-lock.json`과 동일한 입력으로 처음 빌드할 때는 import를 다시 할 필요가 없습니다. 기본 런처·입력기와 언어 선택은 사용자 설정으로 유지합니다.
+
 ## 구성 요점
 
 - **Gralloc:** redroid의 prebuilt `gralloc.gbm.so` 대신 gbm_gralloc `a8874a1` 소스를 빌드하고, 미지원 format을 나눗셈 전에 `-EINVAL`로 거부합니다(`patches/gralloc/`). Intel HD 4600에서 실제 부팅 중 P010 요청 12회가 거부되고 allocator가 유지됩니다.
@@ -143,29 +153,31 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 | `arm64` | `redroid-custom-arm64-test` | 5561 | host(`/dev/dri/renderD128`), 메모리 상한 8GiB |
 | `guest`·`gpu`·`fixed` | `redroid-custom-test`·`-gpu-test`·`-fixed-test` | 5558·5559·5560 | 이전 단계 시험용 |
 
-1. `scripts/nas_preflight.py`의 결과(`build-logs/nas-preflight.json`)로 실행 호스트와 시험 경로를 확인합니다.
-2. `dist/transfer-test/redroid.docker.tar`에 패키지의 `redroid.oci.tar`를 복사합니다. 그다음 `scripts/prepare_nas_transfer.py --package-state build-logs/custom-package-state.json --directory dist/transfer-test`로 제어 파일 묶음과 해시를 만듭니다.
-3. 전송 기록의 값으로 원격 호스트에서 `nas_prepare.py`(시험 폴더 준비)를 실행합니다. archive를 `scp`한 뒤 `nas_load.py`(해시 확인과 `docker load`)를 실행합니다. 두 스크립트는 `ssh test-host python3 - <인자> < scripts/<이름>.py`로 실행합니다. `test-host`는 사용자 환경에 정의한 SSH 별칭으로 바꿉니다.
+1. `scripts/remote_preflight.py`의 결과(`build-logs/remote-preflight.json`)로 실행 호스트와 시험 경로를 확인합니다.
+2. `dist/transfer-test/redroid.docker.tar`에 패키지의 `redroid.oci.tar`를 복사합니다. 그다음 `scripts/prepare_remote_transfer.py --package-state build-logs/custom-package-state.json --directory dist/transfer-test`로 제어 파일 묶음과 해시를 만듭니다.
+3. 전송 기록의 값으로 원격 호스트에서 `remote_prepare.py`(시험 폴더 준비)를 실행합니다. archive를 `scp`한 뒤 `remote_load.py`(해시 확인과 `docker load`)를 실행합니다. 두 스크립트는 `ssh test-host python3 - <인자> < scripts/<이름>.py`로 실행합니다. `test-host`는 사용자 환경에 정의한 SSH 별칭으로 바꿉니다.
 4. 실행 호스트의 시험 폴더에서 검증합니다. `apks/`에 Firefox APK와 `hello_arm64`(`tests/arm64-exec/hello_arm64.c`를 AOSP clang으로 빌드)를 둡니다.
 
    ```bash
-   python3 scripts/nas_coldboot.py $PWD --boots 3      # 새 /data 콜드 부팅 3회 + 같은 데이터 재시작
+   python3 scripts/remote_coldboot.py $PWD --boots 3      # 새 /data 콜드 부팅 3회 + 같은 데이터 재시작
    bash scripts/09-verify.sh --profile arm64           # boot·gpu·arm64·microg·crash·oom, 실패 항목은 종료 코드 비트
    ```
 
 5. 결과를 `build-logs/<폴더>/`로 가져온 뒤 최종 보고서와 SBOM·라이선스 묶음을 만듭니다.
 
    ```bash
-   bash scripts/10-collect-report.sh --nas-dir build-logs/runtime-results --force
+   bash scripts/10-collect-report.sh --runtime-dir build-logs/runtime-results --force
    ```
 
-   `--nas-dir`은 필수이며, 지정한 폴더의 `coldboot-report.json`, `verify-*.json`, `microg-selfcheck.txt`를 읽습니다. `make collect-report NAS_DIR=build-logs/<폴더>`도 같은 경로를 사용합니다. 이전 이미지의 시험 결과나 config의 과거 성공 상태는 현재 부정 시험의 성공으로 사용하지 않습니다.
+   `--runtime-dir`은 필수이며, 지정한 폴더의 `coldboot-report.json`, `verify-*.json`, `microg-selfcheck.txt`를 읽습니다. `make collect-report RUNTIME_DIR=build-logs/<폴더>`도 같은 경로를 사용합니다. 이전 이미지의 시험 결과나 config의 과거 성공 상태는 현재 부정 시험의 성공으로 사용하지 않습니다.
 
 원격 화면은 `ssh -N -L 127.0.0.1:5561:127.0.0.1:5561 test-host`로 터널을 연 뒤 `adb connect 127.0.0.1:5561`, `scrcpy -s 127.0.0.1:5561`로 봅니다. 같은 호스트에서 접속하면 SSH 터널은 필요하지 않습니다.
 
+`--keyboard=uhid`에서 키가 전달되지 않으면 커널의 UHID 드라이버·권한과 컨테이너의 입력 event 노드를 구분해 검사합니다. `remote_keyboard.py`는 실행 호스트에서 명시한 scrcpy 장치 하나만 연결하며, 물리 키보드나 호스트에서 마운트한 `/dev/input`은 수정하지 않습니다. 입력기 선택과 이전 KeliBoard의 물리 키보드 한글 조합 제한, UHID 연결 절차는 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
+
 ### microG 부정 시험 기록
 
-보고서 생성기는 실행 검증 결과 폴더의 `microg-signature-test.json`을 선택적으로 읽습니다. 다른 경로의 증거는 `10-collect-report.sh --nas-dir <실행 검증 결과 폴더> --negative-test <JSON 경로>`로 지정합니다. 두 경로는 프로젝트 기준 상대 경로나 절대 경로를 사용할 수 있습니다.
+보고서 생성기는 실행 검증 결과 폴더의 `microg-signature-test.json`을 선택적으로 읽습니다. 다른 경로의 증거는 `10-collect-report.sh --runtime-dir <실행 검증 결과 폴더> --negative-test <JSON 경로>`로 지정합니다. 두 경로는 프로젝트 기준 상대 경로나 절대 경로를 사용할 수 있습니다.
 
 기록이 없으면 보고서는 정상 생성하고 부정 시험을 `NOT TESTED`로 표시합니다. 다만 `--negative-test`로 지정한 파일이 없거나, 기록 형식이 잘못됐거나, `image_id`가 현재 패키지와 다르면 오류로 중단합니다. 과거 기록을 자동으로 찾거나 현재 이미지의 결과로 변환하지 않습니다.
 
@@ -218,7 +230,7 @@ docker stop redroid-custom-arm64-test
 
 ## 시험과 주의점
 
-현재 테스트는 58개입니다. 아래 명령은 임시 Git 설정을 사용하며 기존 사용자 설정을 바꾸지 않습니다. 실제 공식 패치 시험은 WSL cache의 `upstream/minijail`과 `upstream/redroid-patches` checkout이 있어야 실행되고, 없으면 해당 시험을 skip합니다. microG Java 정책 14개 검사는 별도 `make microg-host-test`로 실행합니다. `FrameworksServicesTests`에 추가한 Android framework 테스트의 실제 실행은 아직 확인하지 않았습니다.
+현재 테스트는 75개입니다. 아래 명령은 임시 Git 설정을 사용하며 기존 사용자 설정을 바꾸지 않습니다. 실제 공식 패치 시험은 WSL cache의 `upstream/minijail`과 `upstream/redroid-patches` checkout이 있어야 실행되고, 없으면 해당 시험을 skip합니다. microG Java 정책 14개 검사는 별도 `make microg-host-test`로 실행합니다. `FrameworksServicesTests`에 추가한 Android framework 테스트의 실제 실행은 아직 확인하지 않았습니다.
 
 ```bash
 (

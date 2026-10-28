@@ -1,0 +1,13 @@
+// Device-node manager that connects scrcpy --keyboard=uhid devices inside the redroid container.
+cc_binary {
+    name: "custom_uhid_inputd",
+    vendor: true,
+    srcs: ["uhid_inputd.c"],
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+    shared_libs: ["liblog"],
+    init_rc: ["custom_uhid_inputd.rc"],
+}

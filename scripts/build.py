@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from phase0 import Phase0, PhaseError, ROOT, require, sha256, write_json
+from build_identity import verify_product
 
 
 def parse_vars(path):
@@ -103,6 +104,8 @@ def run(args):
                     names.append('vendor/lib64/hw/gralloc.gbm.so')
                 if custom_state['features']['with_validation_tools']:
                     names.append('vendor/bin/custom_gralloc_format_test')
+                if custom_state['features'].get('with_uhid_input'):
+                    names.append('vendor/bin/custom_uhid_inputd')
                 if custom_state['features']['with_microg_signature_spoofing']:
                     names.append('system/framework/services.jar')
             if custom_state and custom_state['features']['with_arm64_translation']:
@@ -125,11 +128,27 @@ def run(args):
                 link = product / 'system/lib64/libnb.so'
                 require(link.is_symlink() and link.readlink().as_posix() == 'libndk_translation.so',
                         'libnb.so 링크가 없거나 대상이 다릅니다.')
+            if custom_state:
+                from apps_import import verify_apks
+                for app in verify_apks()['apps']:
+                    name = f'system/app/{app["module"]}/{app["module"]}.apk'
+                    installed = product / name
+                    require(installed.is_file() and sha256(installed.read_bytes()) == app['sha256'],
+                            f'기본 설치 APK가 원본과 다릅니다: {app["module"]}')
+                    names = [*names, name]
+                    for native in app['native_files']:
+                        name = f'system/app/{app["module"]}/lib/x86_64/{native["member"].rsplit("/", 1)[-1]}'
+                        installed = product / name
+                        require(installed.is_file() and sha256(installed.read_bytes()) == native['sha256'],
+                                f'기본 설치 앱의 네이티브 라이브러리가 원본과 다릅니다: {app["module"]}')
+                        names = [*names, name]
             for name in names:
                 image = product / name
                 require(image.is_file() and image.stat().st_size > 0, f'산출물이 없습니다: {image}')
                 artifacts.append(dict(path=str(image.relative_to(phase.source)), size_bytes=image.stat().st_size))
             result['artifacts'] = artifacts
+            if mode in ('build', 'custom-build'):
+                result['build_identity'] = verify_product(product)
         if mode == 'custom-sbom':
             sbom = phase.source / 'out/soong/sbom' / target['product'] / 'sbom.spdx.json'
             document = json.loads(sbom.read_text(encoding='utf-8'))

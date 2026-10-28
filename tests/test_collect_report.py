@@ -19,8 +19,8 @@ class ReportTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory(prefix='redroid-report-')
         self.addCleanup(temporary.cleanup)
         self.root = Path(temporary.name)
-        self.nas = self.root / 'build-logs/current-nas'
-        self.nas.mkdir(parents=True)
+        self.runtime_dir = self.root / 'build-logs/current-runtime'
+        self.runtime_dir.mkdir(parents=True)
         self.source = self.root / 'source'
         self.enterContext(patch.object(report, 'ROOT', self.root))
         self.enterContext(patch.dict(os.environ, REDROID_SOURCE_DIR=str(self.source)))
@@ -39,11 +39,11 @@ class ReportTests(unittest.TestCase):
         path.write_bytes(json.dumps(value).encode())
         return path
 
-    def evidence(self, record=None, relative='build-logs/current-nas/microg-signature-test.json'):
+    def evidence(self, record=None, relative='build-logs/current-runtime/microg-signature-test.json'):
         return self.write(relative, self.record if record is None else record)
 
     def negative(self, specified=None):
-        return report.negative_test(self.nas, specified, self.image, self.official)
+        return report.negative_test(self.runtime_dir, specified, self.image, self.official)
 
     def fixture(self):
         plan = 'e' * 64
@@ -76,13 +76,13 @@ class ReportTests(unittest.TestCase):
             real_certificate_sha256=self.official, target_runtime_status='passed_selfcheck_and_negative_resign'))
         checks = {name: {'pass': True} for name in ('arm64', 'gpu', 'crash')}
         checks['gpu']['gles'] = 'GLES: Intel'
-        self.write('build-logs/current-nas/verify-current.json', dict(
+        self.write('build-logs/current-runtime/verify-current.json', dict(
             image_id=self.image, checks=checks, result=dict(boot='PASS')))
-        self.write('build-logs/current-nas/coldboot-report.json', [dict(
+        self.write('build-logs/current-runtime/coldboot-report.json', [dict(
             label='coldboot-1', gralloc_load=dict(passed=30, iterations=30), p010_rejections=12,
             allocator_pid='100', allocator_pid_after='100',
             firefox=dict(install=True, page_render=True, libmozglue_loaded=True))])
-        (self.nas / 'microg-selfcheck.txt').write_bytes('\n'.join(
+        (self.runtime_dir / 'microg-selfcheck.txt').write_bytes('\n'.join(
             f'{label!r}\nchecked=true' for label in (
                 'System spoofs signature:', 'microG Services has correct signature:',
                 'microG Companion / Play Store has correct signature:')).encode())
@@ -90,10 +90,10 @@ class ReportTests(unittest.TestCase):
 
     def generate(self, *args):
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
-            return report.main(['--nas-dir', 'build-logs/current-nas', *args])
+            return report.main(['--runtime-dir', 'build-logs/current-runtime', *args])
 
     def test_missing_default_does_not_read_historical_result(self):
-        self.write('build-logs/nas-custom-fixed/nas-fixed-microg-test.json', self.record)
+        self.write('build-logs/legacy-run/runtime_dir-fixed-microg-test.json', self.record)
         self.assertEqual(self.negative()['status'], 'NOT TESTED')
 
     def test_explicit_missing_evidence_is_an_error(self):
@@ -161,7 +161,7 @@ class ReportTests(unittest.TestCase):
         self.assertIn('Unsupported signer negative tests: NOT TESTED', text)
         self.assertIn('FrameworksServicesTests): NOT TESTED', text)
         self.assertNotIn('framework tests: PASS', text)
-        self.assertNotIn('nas-custom-fixed', text)
+        self.assertNotIn('legacy-run', text)
 
     def test_report_archives_evidence_and_force_removes_stale_copy(self):
         self.fixture()
@@ -171,7 +171,7 @@ class ReportTests(unittest.TestCase):
         public_report = (self.root / 'docs/reports/final.md').read_text()
         self.assertNotIn(str(self.root), public_report)
         self.assertNotIn('private-build-distribution', public_report)
-        self.assertNotIn('build-logs/current-nas', public_report)
+        self.assertNotIn('build-logs/current-runtime', public_report)
         folder = self.root / 'dist/report-current'
         self.assertEqual((folder / evidence.name).read_bytes(), original)
         self.assertIn(f'{sha256(original)}  {evidence.name}', (folder / 'SHA256SUMS').read_text())

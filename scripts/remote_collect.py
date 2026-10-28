@@ -18,7 +18,7 @@ profile = sys.argv[2] if len(sys.argv) > 2 else 'guest'
 if profile not in ('guest', 'gpu', 'fixed', 'arm64'):
     raise RuntimeError('지원하지 않는 수집 profile입니다.')
 suffix = '' if profile == 'guest' else f'-{profile}'
-prefix = f'nas{suffix}'
+prefix = f'remote{suffix}'
 state = json.loads((root / f'build-logs/runtime{suffix}-state.json').read_text())
 container = state.get('container_name', 'redroid-custom-test')
 image = json.loads(subprocess.check_output(['docker', 'inspect', container], text=True))[0]

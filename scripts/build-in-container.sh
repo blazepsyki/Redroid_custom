@@ -31,7 +31,10 @@ elif [[ $build_mode == custom-modules ]]; then
     modules=()
     [[ $WITH_GRALLOC_FIX != true ]] || modules+=(gralloc.gbm)
     [[ $WITH_VALIDATION_TOOLS != true ]] || modules+=(custom_gralloc_format_test)
+    [[ $WITH_UHID_INPUT != true ]] || modules+=(custom_uhid_inputd)
     [[ $WITH_MICROG_SIGNATURE_SPOOFING != true ]] || modules+=(services)
+    mapfile -t app_modules < <(sed -n 's/^    \(Custom[A-Za-z0-9_]*\) \\$/\1/p' vendor/custom/apps/apps.mk)
+    modules+=("${app_modules[@]}")
     if [[ $WITH_ARM64_TRANSLATION == true ]]; then
         mapfile -t bridge_modules < <(sed -n 's/^    \(custom_nb_[A-Za-z0-9_]*\) \\$/\1/p' vendor/custom/nativebridge/nativebridge.mk)
         ((${#bridge_modules[@]})) || { echo 'Native Bridge 모듈 목록이 비어 있습니다.' >&2; exit 2; }

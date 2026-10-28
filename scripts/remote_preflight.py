@@ -50,6 +50,8 @@ report['docker_usage'] = run(['docker', 'system', 'df'])
 report['test_container'] = run(['docker', 'inspect', 'redroid-custom-test', '--format',
     '{"id":"{{.Id}}","image":"{{.Image}}","state":"{{.State.Status}}"}'])
 report['ports'] = [line for line in run(['ss', '-H', '-ltn'])['stdout'].splitlines()
-                   if ':5558 ' in line or ':5556 ' in line]
-report['existing_redroid_mounts'] = run(['docker', 'inspect', 'redroid-arm64-test', '--format', '{{json .Mounts}}'])
+                   if any(f':{port} ' in line for port in (5558, 5559, 5560, 5561))]
+report['test_containers'] = run(['docker', 'ps', '-a', '--filter', 'label=io.custom-redroid.test=true',
+                                 '--format', '{{.Names}}\t{{.Image}}\t{{.Status}}'])
+report['uhid_device_present'] = Path('/dev/uhid').exists()
 print(json.dumps(report, ensure_ascii=False, indent=2))

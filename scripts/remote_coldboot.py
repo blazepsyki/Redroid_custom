@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""NAS 시험 패키지 폴더에서 arm64 profile의 반복 콜드 부팅과 데이터 유지 시험을 수행합니다.
+"""원격 시험 패키지 폴더에서 arm64 profile의 반복 콜드 부팅과 데이터 유지 시험을 수행합니다.
 
 각 회차는 새 /data로 부팅하고 기능을 검사한 뒤 이 시험이 만든 컨테이너만 제거합니다.
 마지막 회차의 컨테이너는 같은 /data로 재시작해 앱 데이터 유지를 확인합니다.
@@ -176,7 +176,7 @@ def inspect_boot(root, label, install_firefox, gralloc_iterations):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('root', help='NAS 시험 패키지 폴더')
+    parser.add_argument('root', help='원격 시험 패키지 폴더')
     parser.add_argument('--boots', type=int, default=3)
     parser.add_argument('--gralloc-iterations', type=int, default=30)
     args = parser.parse_args()

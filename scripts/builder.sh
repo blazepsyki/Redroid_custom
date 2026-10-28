@@ -47,8 +47,9 @@ if (($# == 0)); then
 fi
 docker_args=(run --rm --init -i --user "$(id -u):$(id -g)"
     --env HOME=/builder-home
-    --env "BUILD_USERNAME=$(id -un)"
+    --env BUILD_USERNAME=redroid
     --env BUILD_HOSTNAME=redroid-builder
+    --env BUILD_NUMBER=redroid.a15r36
     --mount "type=bind,source=$source_dir,target=/src"
     --mount "type=bind,source=$builder_home,target=/builder-home"
     --mount "type=bind,source=$project_dir/scripts,target=/control-scripts,readonly"

@@ -16,6 +16,7 @@ from pathlib import Path
 
 from phase0 import Phase0, PhaseError, ROOT, command, require, sha256, write_json
 from rootfs_metadata import file_hash, verify_tar
+from build_identity import verify_archive, verify_product
 
 OCI_CONFIG = 'application/vnd.oci.image.config.v1+json'
 OCI_MANIFEST = 'application/vnd.oci.image.manifest.v1+json'
@@ -182,6 +183,8 @@ def package(args):
         phase.verify_snapshot(patch_state)
     product = (phase.source / build['properties']['PRODUCT_OUT']).resolve()
     require(product.is_relative_to((phase.source / 'out').resolve()), '산출물 경로가 out 밖입니다.')
+    identity = verify_product(product)
+    require(build.get('build_identity') == identity, '공개용 빌드 식별정보의 검증 기록이 없습니다. 제품을 다시 빌드해 주세요.')
     partitions = ('system', 'vendor', 'system_dlkm')
     hashes = {}
     for name in partitions:
@@ -220,6 +223,7 @@ def package(args):
                   started_at=datetime.now(timezone.utc).isoformat(), finished_at=None, image_tag=tag,
                   dist_dir=str(dist.relative_to(ROOT)), work_dir=str(work), partitions=hashes, runtime_verified=False,
                   image_id=None, artifact_sha256={})
+    result['build_identity'] = identity
     result['variant'] = variant
     if custom_state:
         result.update(features=custom_state['features'], custom_plan_sha256=custom_state['plan_sha256'])
@@ -237,6 +241,7 @@ def package(args):
         layer = dist / 'rootfs.tar.gz'
         diff_id = compress_rootfs(work / 'rootfs.tar', layer)
         verify_tar(layer, metadata)
+        require(verify_archive(layer) == identity, '이미지 archive의 빌드 식별정보가 제품 출력과 다릅니다.')
         labels = {'org.opencontainers.image.title': 'Custom redroid Android 15 순정 이미지',
                   'io.custom-redroid.aosp-tag': phase.lock['aosp']['tag'],
                   'io.custom-redroid.source-manifest-sha256': build['source_manifest_sha256'],
@@ -276,7 +281,7 @@ def package(args):
                        ROOT / 'config/builder-lock.json', ROOT / 'build-logs/official-patches.json', build_path):
             shutil.copyfile(source, dist / source.name)
         if custom_state:
-            for name in ('custom-lock.json', 'features.json', 'gralloc-source-lock.json', 'microg-source-lock.json'):
+            for name in ('custom-lock.json', 'features.json', 'gralloc-source-lock.json', 'microg-source-lock.json', 'apps-lock.json'):
                 shutil.copyfile(ROOT / 'config' / name, dist / name)
         write_json(dist / 'image-inputs.json', hashes)
         result['status'] = 'packaged'
@@ -304,6 +309,7 @@ def write_report(dist, result):
 - Docker 태그: `{result['image_tag']}`
 - Docker 이미지 ID: `{result['image_id']}`
 - 빌드 실행: `{result['build_run_id']}`
+- 빌드 식별정보 검사: 사용자 `{result['build_identity']['username']}`, 호스트 `{result['build_identity']['hostname']}`, 번호 `{result['build_identity']['number']}`
 - 변형: `{result.get('variant', 'vanilla')}`
 - OCI manifest: `{result['oci']['manifest_digest']}`
 - 검증한 rootfs 경로: {result['metadata_entry_count']}개

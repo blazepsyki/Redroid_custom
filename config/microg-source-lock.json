@@ -13,6 +13,5 @@
   "installation_signature_policy": "unchanged",
   "host_policy_checks": 14,
   "target_compile_status": "passed_services",
-  "target_runtime_status": "passed_selfcheck_and_negative_resign",
-  "runtime_evidence": "build-logs/nas-custom-fixed/nas-fixed-microg-test.json"
+  "target_runtime_status": "passed_selfcheck_and_negative_resign"
 }

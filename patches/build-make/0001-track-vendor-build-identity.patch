@@ -1,0 +1,13 @@
+diff --git a/core/sysprop.mk b/core/sysprop.mk
+--- a/core/sysprop.mk
++++ b/core/sysprop.mk
+@@ -264,6 +264,9 @@
+ 
+ $(eval $(call declare-1p-target,$(INSTALLED_VENDOR_BUILD_PROP_TARGET)))
+ 
++# Track identity files read by the recipe during incremental builds.
++$(INSTALLED_VENDOR_BUILD_PROP_TARGET): $(BUILD_FINGERPRINT_FILE) $(SOONG_OUT_DIR)/build_number.txt
++
+ # -----------------------------------------------------------------
+ # product/etc/build.prop
+ #

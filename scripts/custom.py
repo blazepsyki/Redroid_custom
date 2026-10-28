@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -16,6 +17,7 @@ FEATURES = {
     'with_arm64_translation': 'WITH_ARM64_TRANSLATION',
     'with_microg': 'WITH_MICROG',
     'with_validation_tools': 'WITH_VALIDATION_TOOLS',
+    'with_uhid_input': 'WITH_UHID_INPUT',
 }
 
 
@@ -80,6 +82,44 @@ def microg_files():
         '# GSI board 설정이 system_ext에 disable을 두므로, 나중에 읽히는 product 파티션에서 덮어씁니다.\n'
         'PRODUCT_PRODUCT_PROPERTIES += ro.control_privapp_permissions=log\n\n'
         'PRODUCT_PACKAGES += \\\n' + ''.join(f'    {module} \\\n' for module in modules) + '\n').encode()
+    return output
+
+
+def app_files():
+    from apps_import import INPUTS, verify_apks
+    output = {}
+    modules = []
+    blueprint = []
+    native_makefile = ['LOCAL_PATH := $(call my-dir)', '']
+    for app in verify_apks()['apps']:
+        module = app['module']
+        output[f'vendor/custom/apps/{module}.apk'] = (INPUTS / app['file']).read_bytes()
+        modules.append(module)
+        blueprint += ['android_app_import {', f'    name: "{module}",', f'    apk: "{module}.apk",',
+                      '    preprocessed: true,',
+                      *(['    skip_preprocessed_apk_checks: true,'] if app['skip_preprocessed_apk_checks'] else []),
+                      '    privileged: false,', '    dex_preopt: { enabled: false },', '}', '']
+        if app['native_files']:
+            with zipfile.ZipFile(INPUTS / app['file']) as archive:
+                for native in app['native_files']:
+                    member = native['member']
+                    require(member.startswith('lib/x86_64/') and len(member.split('/')) == 3,
+                            '네이티브 라이브러리 경로가 잘못되었습니다.')
+                    data = archive.read(member)
+                    require(sha256(data) == native['sha256'], 'APK 내부 라이브러리 해시가 기록과 다릅니다.')
+                    name = member.rsplit('/', 1)[-1]
+                    local = f'native/{module}/{name}'
+                    output[f'vendor/custom/apps/{local}'] = data
+                    native_module = module + '_Jni_' + ''.join(c if c.isalnum() else '_' for c in name)
+                    modules.append(native_module)
+                    native_makefile += ['include $(CLEAR_VARS)', f'LOCAL_MODULE := {native_module}',
+                                        'LOCAL_MODULE_CLASS := ETC', f'LOCAL_MODULE_PATH := $(TARGET_OUT)/app/{module}/lib/x86_64',
+                                        f'LOCAL_MODULE_STEM := {name}', f'LOCAL_SRC_FILES := {local}',
+                                        'include $(BUILD_PREBUILT)', '']
+    output['vendor/custom/apps/Android.bp'] = '\n'.join(blueprint).encode()
+    output['vendor/custom/apps/Android.mk'] = '\n'.join(native_makefile).encode()
+    output['vendor/custom/apps/apps.mk'] = ('PRODUCT_PACKAGES += \\\n' + ''.join(
+        f'    {module} \\\n' for module in modules) + '\n').encode()
     return output
 
 
@@ -178,6 +218,10 @@ def prepare_plan(phase):
 
     for relative in ('gralloc/Android.mk', 'gralloc/gralloc_format_test.cpp', 'custom.mk'):
         output[f'vendor/custom/{relative}'] = (ROOT / 'vendor/custom' / relative).read_bytes()
+    if features['with_uhid_input']:
+        # Soong parses every Android.bp, so the module is copied only when the feature is enabled.
+        for name in ('Android.bp', 'uhid_inputd.c', 'custom_uhid_inputd.rc'):
+            output[f'vendor/custom/input/{name}'] = (ROOT / 'vendor/custom/input' / name).read_bytes()
     for name in ('MicrogCertificatePolicy.java', 'MicrogSignaturePolicy.java'):
         output[f'frameworks/base/services/core/java/com/android/server/pm/{name}'] = (
             ROOT / 'vendor/custom/framework' / name).read_bytes()
@@ -187,6 +231,7 @@ def prepare_plan(phase):
         output.update(nativebridge_files())
     if features['with_microg']:
         output.update(microg_files())
+    output.update(app_files())
     output['vendor/custom/features.mk'] = ''.join(
         f'{variable} := {str(features[key]).lower()}\n' for key, variable in FEATURES.items()).encode()
     output['product.mk'] = b'$(call inherit-product, vendor/custom/custom.mk)\n'

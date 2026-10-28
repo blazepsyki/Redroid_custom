@@ -2,6 +2,8 @@
 
 `scripts/10-collect-report.sh`가 2026-10-28T05:08:22.871922+00:00에 기록 파일에서 생성했습니다. 근거 파일은 각 항목 옆에 적었습니다.
 
+> 아래 실행 검증은 빌드 식별정보를 고정하기 전 이미지의 기록입니다. 새 이미지 `sha256:e00f5c681819…`의 빌드·정적 검사는 [빌드 식별정보 고정](final-validation.md#빌드-식별정보-고정)을 참고해 주세요. 새 이미지의 부팅·기능 검증은 아직 수행하지 않았습니다.
+
 - Base AOSP: `android-15.0.0_r36` / manifest commit `a0601d2912a6cedcaf97e1372173f8704a2715b0` / build ID `BP1A.250505.005.D1`
 - redroid manifest/patch commits: local_manifests `a116ba2c17fa88de495434211ea9c74f0d3f922f`, redroid-patches `a5c70c0dd89c12b5027c902ab4182f31d38f3bb7`(23개 패치)
 - Product: `redroid_x86_64_only-ap3a-userdebug`

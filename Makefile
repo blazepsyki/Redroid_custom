@@ -1,7 +1,7 @@
 .PHONY: help preflight init sync apply-redroid apply-custom configure build custom-modules custom-build package custom-package custom-sbom runtime-preflight deploy-test verify collect-report test microg-host-test
 
 help:
-	@echo '대상: preflight, sync, apply-redroid, apply-custom, custom-build, custom-package, custom-sbom, verify(NAS), collect-report, test (Linux/WSL에서 실행)'
+	@echo '대상: preflight, sync, apply-redroid, apply-custom, custom-build, custom-package, custom-sbom, verify(실행 호스트), collect-report, test (Linux/WSL에서 실행)'
 
 preflight:
 	bash scripts/00-preflight.sh
@@ -43,8 +43,8 @@ verify:
 	bash scripts/09-verify.sh --profile arm64
 
 collect-report:
-	@test -n "$(NAS_DIR)" || { echo 'NAS_DIR에 현재 이미지의 NAS 결과 폴더를 지정해 주세요.'; exit 1; }
-	bash scripts/10-collect-report.sh --nas-dir "$(NAS_DIR)" --force
+	@test -n "$(RUNTIME_DIR)" || { echo 'RUNTIME_DIR에 현재 이미지의 실행 검증 결과 폴더를 지정해 주세요.'; exit 1; }
+	bash scripts/10-collect-report.sh --runtime-dir "$(RUNTIME_DIR)" --force
 
 microg-host-test:
 	bash scripts/builder.sh bash /control-scripts/check-microg-host.sh

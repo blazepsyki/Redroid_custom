@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from phase0 import PhaseError, ROOT, require, sha256
+from build_identity import BUILD_IDENTITY
 
 
 def load(relative):
@@ -24,8 +25,8 @@ def result(flag):
     return 'PASS' if flag else 'FAIL'
 
 
-def negative_test(nas, specified, image_id, official_signer):
-    path = ROOT / specified if specified is not None else nas / 'microg-signature-test.json'
+def negative_test(runtime_dir, specified, image_id, official_signer):
+    path = ROOT / specified if specified is not None else runtime_dir / 'microg-signature-test.json'
     if specified is None and not path.exists():
         return dict(status='NOT TESTED', detail='현재 이미지의 부정 시험 기록 없음', path=None, data=None)
     require(path.is_file(), f'부정 시험 기록 파일이 없습니다: {path}')
@@ -53,7 +54,7 @@ def negative_test(nas, specified, image_id, official_signer):
                 path=path, data=data)
 
 
-def third_party(microg, bridge):
+def third_party(microg, bridge, apps=None):
     rows = ['| 구성요소 | 버전·출처 | 라이선스 | 재배포 |', '|---|---|---|---|',
             '| AOSP·redroid 소스 빌드 결과 | `android-15.0.0_r36`, redroid local_manifests·patches | 모듈별(Apache-2.0 등), `NOTICE.xml.gz`와 SBOM 참고 | 각 라이선스 조건에 따름 |',
             f'| ARM64 Translation(`libndk_translation` 등 {len(bridge["files"])}개 파일) | Google SDK `{bridge["package"]["path"]}` r{bridge["package"]["revision"]} | {bridge["package"]["license"]} | 금지. 로컬 빌드 전용 |']
@@ -62,13 +63,15 @@ def third_party(microg, bridge):
             rows.append(f'| microG Services(`{app["package"]}`) | {app["version_name"]}, 공식 서명 `{app["signers"][0][:8]}…` | Apache-2.0 | 가능. 이 이미지는 개인용 |')
         else:
             rows.append(f'| Google Play 스토어(`{app["package"]}`) | {app["version_name"]}, Google 서명 계보 `{app["lineage"][0][:8]}…` | Google 독점 | 금지. 로컬 빌드 전용 |')
+    for app in (apps or {}).get('apps', []):
+        rows.append(f'| 기본 설치 앱(`{app["package"]}`) | {app["version_name"]}, 사용자 제공 APK | {app["license"]} | 해당 라이선스 조건에 따름. APK는 Git 제외 |')
     rows.append('| ARM64 Firefox(시험용, 이미지 미포함) | `fenix-159.0.multi.android-arm64-v8a.apk` | MPL-2.0 | 이미지에 넣지 않음 |')
     return rows
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--nas-dir', required=True, help='최신 이미지의 실행 검증 결과 폴더')
+    parser.add_argument('--runtime-dir', required=True, help='최신 이미지의 실행 검증 결과 폴더')
     parser.add_argument('--negative-test', help='현재 이미지의 microG 정상·재서명·복원 시험 JSON. 생략하면 검증 결과 폴더의 microg-signature-test.json을 사용합니다.')
     parser.add_argument('--dry-run', action='store_true', help='입력 기록만 검사하고 파일을 쓰지 않습니다.')
     parser.add_argument('--force', action='store_true', help='기존 report 폴더가 있어도 다시 만듭니다.')
@@ -81,13 +84,14 @@ def main(argv=None):
         gralloc = load('config/gralloc-source-lock.json')
         bridge = load('config/nativebridge-lock.json')
         microg = load('config/microg-apk-lock.json')
+        apps_lock = load('config/apps-lock.json') if (ROOT / 'config/apps-lock.json').is_file() else None
         builder = load('config/builder-lock.json')
         spoof = load('config/microg-source-lock.json')
-        nas = ROOT / args.nas_dir
-        negative = negative_test(nas, args.negative_test, package['image_id'], spoof['real_certificate_sha256'])
-        coldboot = json.loads((nas / 'coldboot-report.json').read_text(encoding='utf-8'))
-        verify = json.loads(sorted(nas.glob('verify-*.json'))[-1].read_text(encoding='utf-8'))
-        selfcheck = (nas / 'microg-selfcheck.txt').read_text(encoding='utf-8')
+        runtime_dir = ROOT / args.runtime_dir
+        negative = negative_test(runtime_dir, args.negative_test, package['image_id'], spoof['real_certificate_sha256'])
+        coldboot = json.loads((runtime_dir / 'coldboot-report.json').read_text(encoding='utf-8'))
+        verify = json.loads(sorted(runtime_dir.glob('verify-*.json'))[-1].read_text(encoding='utf-8'))
+        selfcheck = (runtime_dir / 'microg-selfcheck.txt').read_text(encoding='utf-8')
         require(package['status'] == 'packaged' and build['status'] == 'built', '패키징된 최신 빌드가 필요합니다.')
         require(package['custom_plan_sha256'] == build['custom_plan_sha256'] == sbom_state['custom_plan_sha256'],
                 '패키지·빌드·SBOM의 custom plan이 서로 다릅니다.')
@@ -114,6 +118,9 @@ def main(argv=None):
     gralloc_ok = all(boot['gralloc_load']['passed'] == boot['gralloc_load']['iterations'] and boot['p010_rejections'] > 0
                      and boot['allocator_pid'] == boot['allocator_pid_after'] for boot in coldboot)
     apps = {app['package']: app for app in microg['apps']}
+    identity = build.get('build_identity', {})
+    identity_status = ('PASS' if all(identity.get(key) == value for key, value in BUILD_IDENTITY.items())
+                       and package.get('build_identity') == identity else 'NOT TESTED')
     report_dir = ROOT / 'dist' / f'report-{package["package_id"]}'
     if args.dry_run:
         print(json.dumps(dict(report_dir=str(report_dir), sbom=str(sbom), image_id=package['image_id'],
@@ -133,7 +140,7 @@ def main(argv=None):
         f'# 제3자 구성요소와 재배포 조건 ({package["package_id"]})', '',
         'AOSP 모듈 전체 목록과 라이선스는 `sbom.spdx.json`(SPDX, `m sbom`)과 `NOTICE.xml.gz`에 있습니다. '
         '아래는 AOSP 밖에서 들여온 바이너리입니다. 독점 바이너리가 들어 있으므로 이 이미지는 개인용이며 공개 레지스트리에 올리지 않습니다.', '',
-        *third_party(microg, bridge), '']) + '\n').encode())
+        *third_party(microg, bridge, apps_lock), '']) + '\n').encode())
 
     stamp = datetime.now(timezone.utc).isoformat()
     final = f'''# Custom redroid Android 15 Build Report
@@ -144,6 +151,7 @@ def main(argv=None):
 - redroid manifest/patch commits: local_manifests `{lock['redroid_manifest']['commit']}`, redroid-patches `{lock['redroid_patches']['commit']}`({len(lock['redroid_patches']['patches'])}개 패치)
 - Product: `{lock['target']['lunch']}`
 - Builder: Docker {builder['docker_engine']}, builder `{builder['builder_id'][:19]}…`
+- 공개용 빌드 식별정보 검사: {identity_status} (사용자 `redroid`, 호스트 `redroid-builder`, 번호 `redroid.a15r36`)
 - Gralloc source commit: gbm_gralloc `{gralloc['source']['commit']}` / patch: {', '.join(f"`{Path(p['file']).name}`" for p in gralloc['patches'])} / tests: {result(gralloc_ok)}
 - ARM64 translator source: Android SDK `{bridge['package']['path']}` r{bridge['package']['revision']} / archive SHA-256 `{bridge['archive_sha256'][:16]}…`, {len(bridge['files'])}개 파일 해시는 `config/nativebridge-lock.json` / runtime: {result(checks['arm64']['pass'] and all(f['page_render'] for f in firefox))}
 - microG APK versions/cert hashes: GmsCore {apps['com.google.android.gms']['version_name']} `{apps['com.google.android.gms']['signers'][0][:16]}…`, Play 스토어 {apps['com.android.vending']['version_name']} 계보 `{apps['com.android.vending']['lineage'][0][:16]}…`→`{apps['com.android.vending']['signers'][0][:16]}…`

@@ -31,6 +31,14 @@
       "sha256": "30ec969dbd36933fe0c4ac0698857c00ffca7feef67aaa0d08ee5ab8c4d41916",
       "before_sha256": "c713540f3d672bd992ee6d5c62761dba21e3dded0f6c22b1616a78721fda4e30",
       "after_sha256": "fd19666039468b3d09561aa0e24b629ed259ac70c182b7122fe27cbc8a321ae1"
+    },
+    {
+      "project": "build/make",
+      "path": "core/sysprop.mk",
+      "patch": "patches/build-make/0001-track-vendor-build-identity.patch",
+      "sha256": "0f4dfe7ae32fadbaeefc631db75850529dc06d523502b46dd76084cf128747bd",
+      "before_sha256": "748deedbda9a0181810229ad848311096b060ec0ebe724e5686057f8844d9000",
+      "after_sha256": "0ed2374938db1154cb5a241e40dfec2cad9c3aba634cbeaf329a1f8b36af6821"
     }
   ]
 }

@@ -1,4 +1,5 @@
 include vendor/custom/features.mk
+include vendor/custom/apps/apps.mk
 
 PRODUCT_SYSTEM_PROPERTIES += ro.custom.microg_spoof=$(WITH_MICROG_SIGNATURE_SPOOFING)
 
@@ -10,6 +11,10 @@ endif
 
 ifeq ($(WITH_MICROG),true)
 include vendor/custom/microg/microg.mk
+endif
+
+ifeq ($(WITH_UHID_INPUT),true)
+PRODUCT_PACKAGES += custom_uhid_inputd
 endif
 
 ifeq ($(WITH_VALIDATION_TOOLS),true)

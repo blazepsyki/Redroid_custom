@@ -12,6 +12,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'scripts'))
 import build
 import custom
+import apps_import
 
 
 class BuildResultTests(unittest.TestCase):
@@ -82,23 +83,27 @@ class BuildResultTests(unittest.TestCase):
     def test_custom_module_build_is_separate_from_full_image_success(self):
         self.args.configure_only, self.args.custom, self.args.modules = False, True, True
         features = dict(with_gralloc_fix=True, with_microg_signature_spoofing=True,
-                        with_arm64_translation=False, with_microg=False, with_validation_tools=True)
+                        with_arm64_translation=False, with_microg=False, with_validation_tools=True,
+                        with_uhid_input=False)
         custom_state = dict(features=features, plan_sha256='fixture-custom-plan')
+        app = dict(module='CustomFixture', sha256=build.sha256(b'fixture module'), native_files=[])
         def complete_modules(args, log):
             self.successful_command(args, log)
             for name in ('vendor/lib64/hw/gralloc.gbm.so', 'vendor/bin/custom_gralloc_format_test',
-                         'system/framework/services.jar'):
+                         'system/framework/services.jar', 'system/app/CustomFixture/CustomFixture.apk'):
                 path = self.phase.source / 'out/target/product/redroid_x86_64_only' / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(b'fixture module')
         self.phase.logged = complete_modules
-        with patch.object(custom, 'verify_applied', return_value=custom_state), contextlib.redirect_stdout(io.StringIO()):
+        with patch.object(custom, 'verify_applied', return_value=custom_state), \
+                patch.object(apps_import, 'verify_apks', return_value=dict(apps=[app])), \
+                contextlib.redirect_stdout(io.StringIO()):
             build.run(self.args)
         state = json.loads((self.root / 'build-logs/custom-build-state.json').read_text())
         self.assertEqual(state['status'], 'modules_built')
         self.assertFalse((self.root / 'build-logs/build-state.json').exists())
         self.assertFalse(state['runtime_verified'])
-        self.assertEqual(len(state['artifacts']), 3)
+        self.assertEqual(len(state['artifacts']), 4)
 
 
 if __name__ == '__main__':

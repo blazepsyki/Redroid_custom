@@ -18,10 +18,10 @@ if not root.resolve().is_relative_to(home) or root.is_symlink():
 image = subprocess.run(['docker', 'image', 'inspect', image_tag], capture_output=True, text=True)
 replaced = None
 if image.returncode == 0 and json.loads(image.stdout)[0]['Id'] not in {manifest_id, config_id}:
-    # 같은 태그는 이후 nas_load.py의 docker load가 최신 이미지로 덮어씁니다. 이전 이미지는 지우지 않습니다.
+    # Loading the new archive replaces the tag while preserving the old image.
     replaced = json.loads(image.stdout)[0]['Id']
 root.mkdir(parents=True, exist_ok=True)
-marker = root / 'nas-test-owner.json'
+marker = root / 'remote-test-owner.json'
 owner = dict(package_id=package_id, hostname=expected_host, uid=os.getuid())
 if marker.exists():
     if json.loads(marker.read_text()) != owner:

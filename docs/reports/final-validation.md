@@ -75,7 +75,7 @@ GsfProxy는 대상 앱의 C2DM 의존성이 확인되지 않아 넣지 않았습
 - `scripts/microg_import.py`: 패키지별 서명 종류(`microg`/`google`)와 v3 계보(`apksigner lineage`)를 기록·검사합니다. Play 스토어의 허용 권한과 비활성 컴포넌트를 정의합니다.
 - `scripts/custom.py`: privileged 앱마다 privapp allowlist를, 비활성 컴포넌트가 있으면 sysconfig `component-override`를 생성합니다. 이전 계획이 `vendor/custom`에 만든 파일 중 새 계획에 없는 것은 이전 기록과 해시가 같을 때만 지우고, 수정된 파일이면 중단합니다.
 - `scripts/build.py`: 설치 경로·allowlist·sysconfig 파일 목록을 하드코딩 대신 `config/microg-apk-lock.json`에서 만들고, 설치된 APK가 원본과 같은지 검사합니다.
-- `scripts/nas_coldboot.py`: Play 스토어 설치 위치·주요 권한 부여·`VpaService` 비활성·첫 화면 실행을 확인하고, Java 크래시의 프로세스와 원인을 기록합니다. journalctl의 `-- No entries --`를 GPU 오류로 세던 판정을 고쳤습니다.
+- `scripts/remote_coldboot.py`: Play 스토어 설치 위치·주요 권한 부여·`VpaService` 비활성·첫 화면 실행을 확인하고, Java 크래시의 프로세스와 원인을 기록합니다. journalctl의 `-- No entries --`를 GPU 오류로 세던 판정을 고쳤습니다.
 - `tests/test_custom.py`: 서명 계보 규칙, Play 스토어 권한·비활성 컴포넌트, stale 파일 처리 테스트를 추가했습니다.
 
 microG signature spoofing 정책은 바꾸지 않았습니다. 실제 Google 서명인 Play 스토어는 위장 대상이 아니며, 위장은 계속 공식 microG 인증서의 두 패키지에만 적용됩니다.
@@ -111,7 +111,7 @@ microG signature spoofing 정책은 바꾸지 않았습니다. 실제 Google 서
 
 ## 반복 콜드 부팅과 데이터 유지
 
-`scripts/nas_coldboot.py`가 `arm64` profile(host GPU, 메모리 상한 8GiB)로 새 `/data` 부팅 3회와 같은 데이터 재시작 1회를 수행합니다. 회차마다 이 시험이 만든 컨테이너만 제거합니다.
+`scripts/remote_coldboot.py`가 `arm64` profile(host GPU, 메모리 상한 8GiB)로 새 `/data` 부팅 3회와 같은 데이터 재시작 1회를 수행합니다. 회차마다 이 시험이 만든 컨테이너만 제거합니다.
 
 결과 표는 아래 [원본 메타데이터 이미지](#원본-메타데이터-이미지) 절에 있습니다. 원본 메타데이터의 실행 결과와 symlink SELinux xattr를 제외한 호환 변형의 결과를 구분합니다.
 
@@ -131,7 +131,7 @@ Docker 29.9.2의 classic overlay2에서 symlink의 SELinux xattr를 링크 대�
 
 symlink 534개를 컨테이너 안에서 `rootfs-probe`(lgetxattr)로 읽어 원본 메타데이터와 대조했습니다. 533개가 SELinux 레이블·링크 대상·소유자까지 일치했습니다. 나머지 `/etc`는 Docker가 컨테이너 시작 시 `/etc/hosts`·`resolv.conf`를 넣기 위해 만드는 디렉터리이며, Android는 `/system/etc`를 사용합니다. `docker export`는 SELinux xattr를 tar에 쓰지 않으므로 이 대조에 사용할 수 없습니다.
 
-같은 `nas_coldboot.py` 시험 결과:
+같은 `remote_coldboot.py` 시험 결과:
 
 | 회차 | 부팅 | allocator | Gralloc 부하 | P010 거부 | Firefox 설치·실행·유지·렌더링 | binfmt | crash | OOM | 메모리 최대 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -141,6 +141,31 @@ symlink 534개를 컨테이너 안에서 `rootfs-probe`(lgetxattr)로 읽어 원
 | 같은 데이터 재시작 | — | 146 유지 | 5/5 | 12 | 통과 | 통과 | 0 | 0 | 약 2.9GiB |
 
 같은 인스턴스에서 `ro.control_privapp_permissions=log`, GmsCore에 허용한 4개 권한만 부여, microG Self-Check의 spoof·서명 세 항목 통과를 확인했습니다(`microg-selfcheck.png`). 원본 메타데이터 이미지의 부팅과 기능 시험을 통과한 것으로 판정합니다.
+
+## 빌드 식별정보 고정
+
+빌드 머신의 계정명에서 `eng.<계정명>`을 자동 생성하던 동작을 제거했습니다. 빌더는 사용자 `redroid`, 호스트 `redroid-builder`, 빌드 번호 `redroid.a15r36`을 전달합니다. UID/GID는 파일 쓰기 권한에만 사용합니다.
+
+첫 증분 빌드는 system 속성만 갱신하고 vendor 속성은 이전 값을 유지해 사후 검사에서 실패했습니다. 원인은 vendor `build.prop` 생성 명령이 읽는 fingerprint·빌드 번호 파일의 Ninja 의존성 누락이었습니다. `patches/build-make/0001-track-vendor-build-identity.patch`로 의존성을 추가한 뒤 vendor 속성과 이미지를 다시 생성했습니다. 전체 `out/`은 삭제하지 않았습니다.
+
+| 항목 | 결과 |
+|---|---|
+| 제품 빌드 | `20261028T053130525777Z`, 성공 |
+| 패키지 | `20261028T053327563763Z` |
+| 이미지 ID | `sha256:e00f5c6818197ce27f967e636ceba1ee3e97e1017508f04c6fc51b6a049aa8a3` |
+| `ro.build.user` | `redroid` |
+| `ro.build.host` | `redroid-builder` |
+| `ro.build.version.incremental` | `redroid.a15r36` |
+| 제품·rootfs archive·Docker snapshot의 `build.prop` | 8개 파일의 식별정보 검사 통과 |
+| 계정명·호스트명 흔적 검색 | 일반 파일 2,873개와 압축 파일 내부 항목 51,601개에서 검색 결과 0건 |
+| Docker 이미지 config | 계정명·호스트명 검색 결과 0건 |
+| 회귀 테스트 | 64개 통과 |
+| SBOM | 새 custom plan으로 재생성 |
+| 새 이미지 부팅·기능 검증 | NOT TESTED |
+
+검색에는 빌드 계정명·기존 incremental 번호·빌드 호스트명의 UTF-8 및 UTF-16LE 표현을 사용했고, APK/JAR 등 ZIP 항목과 gzip 내용도 검사했습니다. 위 검사는 해당 식별자의 잔존 여부를 확인한 것이며, 일반적인 개인정보 전체를 탐지하는 검사는 아닙니다.
+
+이전 이미지와 실행 중인 컨테이너는 보존했습니다. 새 이미지를 가져와 컨테이너를 다시 생성해야 실행 화면의 빌드 번호가 바뀝니다. 이 절의 정적 검사 결과를 위의 이전 이미지 부팅·앱 시험 결과와 구분합니다.
 
 ## 남은 항목
 
