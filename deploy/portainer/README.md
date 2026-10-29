@@ -59,7 +59,7 @@
    adb -s <NAS IP>:5555 shell ls -l /dev/uhid                 # uhid uhid 0660
    ```
 
-계정·앱·Fcitx5 설정은 `/data`에 있으므로 그대로 유지됩니다.
+계정·앱·입력기 설정은 `/data`에 있으므로 그대로 유지됩니다.
 
 ## 이미지 갱신
 

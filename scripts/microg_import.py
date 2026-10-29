@@ -23,11 +23,14 @@ INPUTS = ROOT / 'inputs/microg'
 # 두 원본은 dex·JNI가 압축되어 있어 Soong의 preprocessed 검사를 건너뛰어야 원본 서명을 유지합니다.
 APPS = {
     'com.google.android.gms': dict(module='GmsCore', privileged=True, skip_preprocessed_apk_checks=True, signer='microg',
-                                   disabled_components=[]),
+                                   disabled_components=[], allow_in_power_save=False),
     # VpaService(기본 앱 자동 설치)는 Android 15에서 systemExempted 포그라운드 서비스 조건(정확한 알람 권한)을
     # 만족하지 못해 Play 스토어를 반복 종료시키므로, sysconfig의 component-override로 처음부터 끕니다.
     'com.android.vending': dict(module='Phonesky', privileged=True, skip_preprocessed_apk_checks=True, signer='google',
-                                disabled_components=['com.google.android.finsky.setup.VpaService']),
+                                disabled_components=['com.google.android.finsky.setup.VpaService'],
+                                # 다운로드 서비스도 systemExempted 포그라운드 서비스입니다. GMS 기기처럼 시스템 절전 예외에 넣어
+                                # 정확한 알람 권한 없이 시작할 수 있게 합니다. 없으면 앱 다운로드가 시작 직후 실패합니다.
+                                allow_in_power_save=True),
 }
 ALLOWED_PRIVILEGED = {
     'com.google.android.gms': [
@@ -74,14 +77,17 @@ def inspect(path):
     verify = subprocess.run([java, '-jar', apksigner, 'verify', '--verbose', '--print-certs', path],
                             capture_output=True, text=True)
     require(verify.returncode == 0, f'apksigner 검증 실패: {path.name}\n{verify.stderr}')
-    signers = re.findall(r'^Signer #\d+ certificate SHA-256 digest: ([0-9a-f]{64})$', verify.stdout, re.M)
+    # v3.1 서명은 SDK 구간별 서명자를 `Signer (minSdkVersion=…, maxSdkVersion=…)`로 출력합니다.
+    signers = re.findall(r'^Signer (?:#\d+|\(minSdkVersion=\d+, maxSdkVersion=\d+\)) certificate SHA-256 digest: ([0-9a-f]{64})$',
+                         verify.stdout, re.M)
     # v3 키 교체 계보입니다. 계보가 없는 APK는 빈 목록입니다.
     lineage = subprocess.run([java, '-jar', apksigner, 'lineage', '--in', path, '--print-certs'],
                              capture_output=True, text=True)
     lineage = re.findall(r'^Signer #\d+ in lineage certificate SHA-256 digest: ([0-9a-f]{64})$', lineage.stdout, re.M)
     schemes = sorted(set(re.findall(r'^Verified using (v[\d.]+) scheme \(.*\): true$', verify.stdout, re.M)))
     badging = subprocess.check_output([aapt2, 'dump', 'badging', path], text=True)
-    package = re.search(r"^package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'", badging, re.M)
+    # 분할 APK는 versionName이 비어 있습니다.
+    package = re.search(r"^package: name='([^']+)' versionCode='(\d+)' versionName='([^']*)'", badging, re.M)
     require(package, f'패키지 정보를 읽을 수 없습니다: {path.name}')
     permissions = subprocess.check_output([aapt2, 'dump', 'permissions', path], text=True)
     requested = sorted(set(re.findall(r"^uses-permission: name='([^']+)'", permissions, re.M)))

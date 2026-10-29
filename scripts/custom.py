@@ -76,6 +76,14 @@ def microg_files():
             blueprint += ['prebuilt_etc {', f'    name: "custom_microg_{module}_components",', f'    src: "{name}",',
                           '    sub_dir: "sysconfig",', f'    filename: "{name}",', '}', '']
             modules.append(f'custom_microg_{module}_components')
+        if app.get('allow_in_power_save'):
+            xml = ['<?xml version="1.0" encoding="utf-8"?>', '<config>',
+                   f'    <allow-in-power-save package="{app["package"]}"/>', '</config>', '']
+            name = f'power-save-{app["package"]}.xml'
+            output[f'vendor/custom/microg/{name}'] = '\n'.join(xml).encode()
+            blueprint += ['prebuilt_etc {', f'    name: "custom_microg_{module}_power_save",', f'    src: "{name}",',
+                          '    sub_dir: "sysconfig",', f'    filename: "{name}",', '}', '']
+            modules.append(f'custom_microg_{module}_power_save')
     output['vendor/custom/microg/Android.bp'] = '\n'.join(blueprint).encode()
     output['vendor/custom/microg/microg.mk'] = (
         '# allowlist의 허용·거부를 적용합니다. 목록에 없는 다른 앱의 권한은 log만 남기고 유지됩니다.\n'
@@ -116,6 +124,17 @@ def app_files():
                                         'LOCAL_MODULE_CLASS := ETC', f'LOCAL_MODULE_PATH := $(TARGET_OUT)/app/{module}/lib/x86_64',
                                         f'LOCAL_MODULE_STEM := {name}', f'LOCAL_SRC_FILES := {local}',
                                         'include $(BUILD_PREBUILT)', '']
+        # Soong의 앱 모듈은 분할 APK를 다루지 않으므로 base 옆에 원본 그대로 복사합니다.
+        for split in app.get('splits', []):
+            name = f'split_{split["name"]}.apk'
+            local = f'splits/{module}/{name}'
+            output[f'vendor/custom/apps/{local}'] = (INPUTS / split['file']).read_bytes()
+            split_module = module + '_Split_' + ''.join(c if c.isalnum() else '_' for c in split['name'])
+            modules.append(split_module)
+            native_makefile += ['include $(CLEAR_VARS)', f'LOCAL_MODULE := {split_module}',
+                                'LOCAL_MODULE_CLASS := ETC', f'LOCAL_MODULE_PATH := $(TARGET_OUT)/app/{module}',
+                                f'LOCAL_MODULE_STEM := {name}', f'LOCAL_SRC_FILES := {local}',
+                                'include $(BUILD_PREBUILT)', '']
     output['vendor/custom/apps/Android.bp'] = '\n'.join(blueprint).encode()
     output['vendor/custom/apps/Android.mk'] = '\n'.join(native_makefile).encode()
     output['vendor/custom/apps/apps.mk'] = ('PRODUCT_PACKAGES += \\\n' + ''.join(

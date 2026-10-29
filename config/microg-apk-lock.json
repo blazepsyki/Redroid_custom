@@ -11,6 +11,7 @@
       "disabled_components": [
         "com.google.android.finsky.setup.VpaService"
       ],
+      "allow_in_power_save": true,
       "package": "com.android.vending",
       "version_code": 85372340,
       "version_name": "53.7.23-34 [0] [PR] 1001145691",
@@ -225,6 +226,7 @@
       "skip_preprocessed_apk_checks": true,
       "signer": "microg",
       "disabled_components": [],
+      "allow_in_power_save": false,
       "package": "com.google.android.gms",
       "version_code": 252432034,
       "version_name": "0.3.17.252432",

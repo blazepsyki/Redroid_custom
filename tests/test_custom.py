@@ -86,6 +86,7 @@ class MicrogImportTests(unittest.TestCase):
         self.assertNotIn('android.permission.PACKAGE_VERIFICATION_AGENT', allowed)
         self.assertIn('com.google.android.finsky.setup.VpaService',
                       microg_import.APPS['com.android.vending']['disabled_components'])
+        self.assertTrue(microg_import.APPS['com.android.vending']['allow_in_power_save'])
 
 
 class NativeBridgeImportTests(unittest.TestCase):

@@ -122,6 +122,8 @@ def run(args):
                         names.append(f'system/etc/permissions/privapp-permissions-{app["package"]}.xml')
                     if app.get('disabled_components'):
                         names.append(f'system/etc/sysconfig/component-overrides-{app["package"]}.xml')
+                    if app.get('allow_in_power_save'):
+                        names.append(f'system/etc/sysconfig/power-save-{app["package"]}.xml')
                     installed = product / 'system' / folder / app['module'] / f'{app["module"]}.apk'
                     require(installed.is_file() and sha256(installed.read_bytes()) == app['sha256'],
                             f'설치된 microG APK가 공식 원본과 다릅니다: {app["module"]}')
@@ -141,6 +143,12 @@ def run(args):
                         installed = product / name
                         require(installed.is_file() and sha256(installed.read_bytes()) == native['sha256'],
                                 f'기본 설치 앱의 네이티브 라이브러리가 원본과 다릅니다: {app["module"]}')
+                        names = [*names, name]
+                    for split in app.get('splits', []):
+                        name = f'system/app/{app["module"]}/split_{split["name"]}.apk'
+                        installed = product / name
+                        require(installed.is_file() and sha256(installed.read_bytes()) == split['sha256'],
+                                f'기본 설치 앱의 분할 APK가 원본과 다릅니다: {app["module"]}')
                         names = [*names, name]
             for name in names:
                 image = product / name

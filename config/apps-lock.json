@@ -89,7 +89,70 @@
       "min_sdk": 26,
       "target_sdk": 35,
       "extract_native_libs": false,
-      "native_files": []
+      "native_files": [],
+      "splits": []
+    },
+    {
+      "package": "com.google.android.inputmethod.latin",
+      "version_code": 176027080,
+      "version_name": "18.4.1.985164140-release-x86_64",
+      "signers": [
+        "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053",
+        "f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83"
+      ],
+      "lineage": [
+        "f0fd6c5b410f25cb25c3b53346c8972fae30f8ee7411df910480ad6b2d60db83",
+        "7ce83c1b71f3d572fed04c8d40c5cb10ff75e6d87d9df6fbd53f0468c2905053"
+      ],
+      "schemes": [
+        "v3",
+        "v3.1"
+      ],
+      "requested_permissions": [
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_WIFI_STATE",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.GET_ACCOUNTS",
+        "android.permission.GET_PACKAGE_SIZE",
+        "android.permission.INJECT_KEY_EVENTS",
+        "android.permission.INTERNET",
+        "android.permission.PERSONAL_CONTEXT_HOST_INSIGHT_SURFACE",
+        "android.permission.PERSONAL_CONTEXT_PUBLISH_HINTS",
+        "android.permission.PERSONAL_CONTEXT_RECEIVE_INSIGHTS",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_USER_DICTIONARY",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.WAKE_LOCK",
+        "android.permission.WRITE_USER_DICTIONARY",
+        "com.google.android.apps.aicore.service.BIND_SERVICE",
+        "com.google.android.providers.gsf.permission.READ_GSERVICES",
+        "com.google.android.setupwizard.READ_DEVICE_ORIGIN_FIRST_PARTY"
+      ],
+      "module": "CustomGboard",
+      "privileged": false,
+      "file": "com.google.android.inputmethod.latin-176027080.apk",
+      "sha256": "e9f720adb03290759ad5f7973cc1f70b3ea778f63d1d5a2756883e60a3b53c3e",
+      "size": 92618470,
+      "abis": [
+        "x86_64"
+      ],
+      "license": "Google 독점",
+      "source": "Google Play 스토어",
+      "provenance": "user-supplied",
+      "skip_preprocessed_apk_checks": false,
+      "min_sdk": 32,
+      "target_sdk": 37,
+      "extract_native_libs": false,
+      "native_files": [],
+      "splits": [
+        {
+          "name": "config.xhdpi",
+          "file": "com.google.android.inputmethod.latin-176027080-split_config.xhdpi.apk",
+          "sha256": "32f8de1d23c12838d7ff72dac0b3096656081fbec050259366e9fc8c187cb89d",
+          "size": 96986
+        }
+      ]
     },
     {
       "package": "org.mozilla.firefox",
@@ -245,201 +308,9 @@
           "sha256": "0652a663229900326e3adb8da624c869821510e44baa398bd31561749e8a1532",
           "size": 167470272
         }
-      ]
-    },
-    {
-      "package": "org.fcitx.fcitx5.android",
-      "version_code": 114,
-      "version_name": "0.1.3-0-g048f581c",
-      "signers": [
-        "e4db1e9edff13629d07de4bbf8165fe9bd8557ab55092672da8e40dbe484ecd7"
       ],
-      "lineage": [],
-      "schemes": [
-        "v1",
-        "v2"
-      ],
-      "requested_permissions": [
-        "android.permission.POST_NOTIFICATIONS",
-        "android.permission.VIBRATE",
-        "org.fcitx.fcitx5.android.permission.PLUGIN"
-      ],
-      "module": "CustomFcitx5",
-      "privileged": false,
-      "file": "org.fcitx.fcitx5.android-0.1.3-0-g048f581c-x86_64-release.apk",
-      "sha256": "aaeb569fc3e9e8ec532b0ea33be39ce77b143c8add824d172f17356ddc3b9ed2",
-      "size": 46106936,
-      "abis": [
-        "x86_64"
-      ],
-      "license": "LGPL-2.1 및 포함 엔진별 고지 참조",
-      "source": "https://github.com/fcitx5-android/fcitx5-android",
-      "provenance": "user-supplied",
-      "skip_preprocessed_apk_checks": true,
-      "min_sdk": 23,
-      "target_sdk": 36,
-      "extract_native_libs": true,
-      "native_files": [
-        {
-          "member": "lib/x86_64/libFcitx5Config.so",
-          "sha256": "17bf54a09dcf28feb848af00271fde0cb7bebdac23c088a92f352a77e14a3892",
-          "size": 134896
-        },
-        {
-          "member": "lib/x86_64/libFcitx5Core.so",
-          "sha256": "8d397e1e57fef2047330797007d3f31face20d4a05ae8eaafbb3c47206750934",
-          "size": 996856
-        },
-        {
-          "member": "lib/x86_64/libFcitx5Utils.so",
-          "sha256": "b97607c4aec9d06823367149206e55aa6e2b0da3f66f093c77095b126db56c4d",
-          "size": 813096
-        },
-        {
-          "member": "lib/x86_64/libIMECore.so",
-          "sha256": "1acab46be6a942218fdb531506dcbd86815622c5e8633be5f2ab9d521080dda2",
-          "size": 1403016
-        },
-        {
-          "member": "lib/x86_64/libIMEPinyin.so",
-          "sha256": "71bc29ef0a9f5a2ce74222eaff7ca99007e703ff55ca9e911a790916a0fc2ad5",
-          "size": 579168
-        },
-        {
-          "member": "lib/x86_64/libIMETable.so",
-          "sha256": "43af84fae257a241268872bb4fac91a54914613a5870ac437bd8a871dfe5b5cc",
-          "size": 455128
-        },
-        {
-          "member": "lib/x86_64/libandroidfrontend.so",
-          "sha256": "ec4a5af9b2bdfaf9c10cc4d2d0db06caae27aa13630169d1beb85a754ee98405",
-          "size": 127952
-        },
-        {
-          "member": "lib/x86_64/libandroidkeyboard.so",
-          "sha256": "67e1f709ddf635ba7097213a26f0bca1ed02ea088514670da6aaaf72918305b2",
-          "size": 93416
-        },
-        {
-          "member": "lib/x86_64/libandroidnotification.so",
-          "sha256": "399043c1b2a05b2bf1972ceeae9f09fd7040423a300f457a381208916200e6bc",
-          "size": 57096
-        },
-        {
-          "member": "lib/x86_64/libc++_shared.so",
-          "sha256": "d6bceb7915ddb75ec4f96f97837efd80cf6084b00ad38e2666728f6cc24a9f68",
-          "size": 1229808
-        },
-        {
-          "member": "lib/x86_64/libchttrans.so",
-          "sha256": "c5668555336e0773a31b58a4791a0604c1e49e978bca0999a1a4bf50dbb84475",
-          "size": 413088
-        },
-        {
-          "member": "lib/x86_64/libclipboard.so",
-          "sha256": "35381a9ec14191728624ca498039376ad6107c54a4902fced69674876dbe6efd",
-          "size": 99136
-        },
-        {
-          "member": "lib/x86_64/libfullwidth.so",
-          "sha256": "64579c3ce12ceecdbde460d5ff9fd57bb70f74ef38953a6a44523cde6c98dce8",
-          "size": 66000
-        },
-        {
-          "member": "lib/x86_64/libimselector.so",
-          "sha256": "ad3c7c8a0dabfead6acee6910c23fcab022aa17e8036c0a38354d539dbd0e950",
-          "size": 66856
-        },
-        {
-          "member": "lib/x86_64/libluaaddonloader.so",
-          "sha256": "ad8434277e47cc9eaee62a7adb75e0ffa578d42c6d98249a47914cf21b740e1c",
-          "size": 424792
-        },
-        {
-          "member": "lib/x86_64/libnative-lib.so",
-          "sha256": "843da1dca412d71456d26a22b6112858a185e737be7075a74fa5d3eca7dbcac1",
-          "size": 425744
-        },
-        {
-          "member": "lib/x86_64/libpinyin.so",
-          "sha256": "f194ff05b79295b4fd18226e2bba51ca478c1b400e8353066bf77acac2d7baed",
-          "size": 640760
-        },
-        {
-          "member": "lib/x86_64/libpinyinhelper.so",
-          "sha256": "be96f3d8c96fe3d5c0bbdebed25258751ffa866288e82d614effa642d7e91c87",
-          "size": 158528
-        },
-        {
-          "member": "lib/x86_64/libpunctuation.so",
-          "sha256": "ee34d048a73e93bdf7ec6b987e035b3b416b415b1bf9103a4c153ee348a6af3a",
-          "size": 151376
-        },
-        {
-          "member": "lib/x86_64/libquickphrase.so",
-          "sha256": "3fa80289ba58520afad304ba897dd10674ee8d595108919fa38430090a48e1c6",
-          "size": 123312
-        },
-        {
-          "member": "lib/x86_64/libscel2org5.so",
-          "sha256": "d61af5204efe1caa38896944f2e843942df64403b26394e42a79739573903376",
-          "size": 139840
-        },
-        {
-          "member": "lib/x86_64/libspell.so",
-          "sha256": "6b32ede9477065ce1f50f9345825c9ddeb520a75db037bf122ff2a42353f91eb",
-          "size": 134288
-        },
-        {
-          "member": "lib/x86_64/libtable.so",
-          "sha256": "aa64019a63b775793b7cfe46d0fa6cde1bc9f82b375d277481389c9a5c9816b8",
-          "size": 391656
-        },
-        {
-          "member": "lib/x86_64/libunicode.so",
-          "sha256": "d644e7338225b1c6c10e1a612167a80b8eb00ee3cf64066414d7764343de50cc",
-          "size": 161432
-        }
-      ]
-    },
-    {
-      "package": "org.fcitx.fcitx5.android.plugin.hangul",
-      "version_code": 114,
-      "version_name": "0.1.3-0-g048f581c",
-      "signers": [
-        "e4db1e9edff13629d07de4bbf8165fe9bd8557ab55092672da8e40dbe484ecd7"
-      ],
-      "lineage": [],
-      "schemes": [
-        "v1",
-        "v2"
-      ],
-      "requested_permissions": [
-        "android.permission.REQUEST_DELETE_PACKAGES"
-      ],
-      "module": "CustomFcitx5Hangul",
-      "privileged": false,
-      "file": "org.fcitx.fcitx5.android.plugin.hangul-0.1.3-0-g048f581c-x86_64-release.apk",
-      "sha256": "d8e8facd48fd6898e3f0b81723b38a25e94eb8667926ca61f2171ea253460a1b",
-      "size": 2571394,
-      "abis": [
-        "x86_64"
-      ],
-      "license": "프로젝트 LICENSE 및 포함 엔진별 고지 참조",
-      "source": "https://github.com/fcitx5-android/fcitx5-android/tree/master/plugin/hangul",
-      "provenance": "user-supplied",
-      "skip_preprocessed_apk_checks": true,
-      "min_sdk": 23,
-      "target_sdk": 36,
-      "extract_native_libs": true,
-      "native_files": [
-        {
-          "member": "lib/x86_64/libhangul.so",
-          "sha256": "4effb8aa7e22d5f04c819f4a659c63439fdc553d0e5a06be9a2b6c421544cb0a",
-          "size": 157608
-        }
-      ]
+      "splits": []
     }
   ],
-  "recorded_at": "2026-10-28T13:40:32.365298+00:00"
+  "recorded_at": "2026-10-29T05:18:17.559416+00:00"
 }
