@@ -23,16 +23,10 @@ class PreinstalledAppTests(unittest.TestCase):
             data = f'original-apk-{index}'.encode()
             filename = f'app-{index}.apk'
             (self.root / filename).write_bytes(data)
-            splits = []
-            if expected['splits']:
-                split_data = f'original-split-{index}'.encode()
-                (self.root / f'app-{index}-split.apk').write_bytes(split_data)
-                splits.append(dict(name='config.xhdpi', file=f'app-{index}-split.apk',
-                                   sha256=hashlib.sha256(split_data).hexdigest(), size=len(split_data)))
-            self.apps.append(dict(package=package, module=expected['module'], signers=expected['signers'],
+            self.apps.append(dict(package=package, module=expected['module'], signers=[expected['signer']],
                                   privileged=False, file=filename, sha256=hashlib.sha256(data).hexdigest(),
                                   skip_preprocessed_apk_checks=index % 2 == 1, version_code=114, version_name='fixture', min_sdk=23,
-                                  extract_native_libs=False, native_files=[], splits=splits))
+                                  extract_native_libs=False, native_files=[]))
         self.lock = self.root / 'apps-lock.json'
         self.save()
         self.enterContext(patch.object(apps_import, 'INPUTS', self.root))
@@ -73,27 +67,11 @@ class PreinstalledAppTests(unittest.TestCase):
         with self.assertRaisesRegex(PhaseError, '입력 경로'):
             apps_import.verify_apks()
 
-    def split_app(self):
-        return next(app for app in self.apps if app['splits'])
-
-    def test_split_apk_is_copied_next_to_base(self):
-        app = self.split_app()
-        split = app['splits'][0]
-        files = custom.app_files()
-        self.assertEqual(files[f'vendor/custom/apps/splits/{app["module"]}/split_config.xhdpi.apk'],
-                         (self.root / split['file']).read_bytes())
-        makefile = files['vendor/custom/apps/Android.mk'].decode()
-        self.assertIn(f'LOCAL_MODULE_PATH := $(TARGET_OUT)/app/{app["module"]}\n', makefile)
-        self.assertIn('LOCAL_MODULE_STEM := split_config.xhdpi.apk', makefile)
-
-    def test_changed_or_missing_split_is_rejected(self):
-        app = self.split_app()
-        (self.root / app['splits'][0]['file']).write_bytes(b'modified')
-        with self.assertRaisesRegex(PhaseError, 'APK가 기록과 다릅니다'):
-            apps_import.verify_apks()
-        app['splits'] = []
+    def test_fcitx_plugin_version_mismatch_is_rejected(self):
+        plugin = next(app for app in self.apps if app['package'] == 'org.fcitx.fcitx5.android.plugin.hangul')
+        plugin['version_code'] += 1
         self.save()
-        with self.assertRaisesRegex(PhaseError, '분할 APK'):
+        with self.assertRaisesRegex(PhaseError, '버전이 다릅니다'):
             apps_import.verify_apks()
 
     def test_newer_minimum_sdk_is_rejected(self):

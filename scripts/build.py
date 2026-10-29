@@ -144,12 +144,6 @@ def run(args):
                         require(installed.is_file() and sha256(installed.read_bytes()) == native['sha256'],
                                 f'기본 설치 앱의 네이티브 라이브러리가 원본과 다릅니다: {app["module"]}')
                         names = [*names, name]
-                    for split in app.get('splits', []):
-                        name = f'system/app/{app["module"]}/split_{split["name"]}.apk'
-                        installed = product / name
-                        require(installed.is_file() and sha256(installed.read_bytes()) == split['sha256'],
-                                f'기본 설치 앱의 분할 APK가 원본과 다릅니다: {app["module"]}')
-                        names = [*names, name]
             for name in names:
                 image = product / name
                 require(image.is_file() and image.stat().st_size > 0, f'산출물이 없습니다: {image}')

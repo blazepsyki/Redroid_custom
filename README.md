@@ -6,7 +6,7 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 - ARM64 앱 실행(Android SDK API 35의 `libndk_translation`)
 - 공식 microG 인증서 전용 Signature Spoofing
 - microG Services와 Google Play 스토어 기본 탑재
-- 사용자 제공 Lawnchair, Gboard, Firefox(x86_64) APK 기본 탑재
+- 사용자 제공 Lawnchair, Fcitx5·Hangul 플러그인, Firefox(x86_64) APK 기본 탑재
 
 요구사항은 [개발 명세서](docs/DEVELOPMENT.md)에 있습니다. 최신 결과는 [최종 보고서](docs/reports/final.md)에, 검증 경과와 Play 스토어 사용 절차는 [최종 검증 보고서](docs/reports/final-validation.md)에 있습니다. 24~72시간 방치 시험과 Google 계정이 필요한 시험(로그인 유지·FCM·Play 스토어 앱 설치)은 아직 수행하지 않았습니다.
 
@@ -21,7 +21,7 @@ AOSP `android-15.0.0_r36`과 공식 redroid 패치 위에 다음을 통합한 `r
 | `manifests/redroid.xml` | 고정한 redroid local manifest |
 | `docker/Dockerfile.builder` | AOSP 빌드 컨테이너 |
 | `tests/` | 자동화 단위 테스트, microG 정책 Java 시험, ARM64 직접 실행 시험 프로그램 |
-| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `apks/`(Lawnchair, Gboard, Firefox), `test-apks/`(ARM64 Firefox) |
+| `inputs/` (Git 제외) | 사용자가 확보한 APK. `microg/`(GmsCore, Play 스토어), `apks/`(Lawnchair, Fcitx5·Hangul 플러그인, Firefox), `test-apks/`(ARM64 Firefox) |
 | `dist/` (Git 제외) | 이미지 패키지 `a15-r36-custom-<package_id>/`와 SBOM·라이선스 묶음 `report-<package_id>/` |
 | `build-logs/` (Git 제외) | 빌드·패키지·SBOM 상태 파일과 실행 검증 증거 |
 | `docs/` | [개발 명세서](docs/DEVELOPMENT.md), 최종 보고서, [패치 적용 안내](docs/patching.md) |
@@ -61,12 +61,11 @@ AOSP 소스와 빌드 출력은 `config/build.env`의 `REDROID_SOURCE_DIR`에 �
    | microG Services `com.google.android.gms-252432034.apk` | `inputs/microg/` | `config/microg-apk-lock.json` |
    | Play 스토어 `com.android.vending-85372340.apk` | `inputs/microg/` | `config/microg-apk-lock.json` |
    | Lawnchair `Lawnchair.15.0.0.Beta.3.0.apk` | `inputs/apks/` | `config/apps-lock.json` |
-   | Gboard `com.google.android.inputmethod.latin-176027080.apk`와 `…-split_config.xhdpi.apk` | `inputs/apks/` | `config/apps-lock.json` |
+   | Fcitx5 `org.fcitx.fcitx5.android-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
+   | Hangul 플러그인 `org.fcitx.fcitx5.android.plugin.hangul-0.1.3-0-g048f581c-x86_64-release.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Firefox `fenix-159.0.multi.android-x86_64.apk` | `inputs/apks/` | `config/apps-lock.json` |
    | Android SDK `x86_64-35_r09.zip`(약 1.7GB) | WSL `~/.cache/custom-redroid/nativebridge/` | `config/nativebridge-lock.json` |
    | 시험용 `fenix-159.0.multi.android-arm64-v8a.apk` | `inputs/test-apks/` | 이미지에 넣지 않음 |
-
-   Gboard는 Play 스토어로 설치한 기기에서 `pm path com.google.android.inputmethod.latin`의 `base.apk`와 밀도 분할 APK를 꺼내 씁니다. base가 밀도 분할을 필수로 요구하므로 두 파일이 모두 필요합니다. Google 독점 앱이므로 재배포하지 않습니다.
 
    Firefox APK는 `https://archive.mozilla.org/pub/fenix/releases/159.0/android/`에서 받습니다. x86_64와 ARM64 APK 모두 같은 Mozilla 서명이어야 합니다.
 
@@ -118,7 +117,7 @@ bash scripts/06-build.sh --custom --sbom
   python3 scripts/microg_import.py
   ```
 
-- **기본 설치 APK 교체:** `inputs/apks/`에 세 패키지의 APK(Gboard는 분할 APK 포함)를 두고 `python3 scripts/apps_import.py`로 패키지·서명·버전·ABI·SHA-256을 검사합니다. 원본 바이트를 그대로 `/system/app/CustomLawnchair/`, `/system/app/CustomGboard/`(분할 APK 포함), `/system/app/CustomFirefox/`에 설치하며 추가 privileged 권한은 부여하지 않습니다. 압축·정렬 상태를 검사해 필요한 APK에만 Soong 검사 예외를 적용합니다. 기존 `apps-lock.json`과 동일한 입력으로 처음 빌드할 때는 import를 다시 할 필요가 없습니다. 기본 런처·입력기와 언어 선택은 사용자 설정으로 유지합니다.
+- **기본 설치 APK 교체:** `inputs/apks/`에 네 패키지의 APK를 하나씩 두고 `python3 scripts/apps_import.py`로 패키지·서명·버전·ABI·SHA-256을 검사합니다. 원본 바이트를 그대로 `/system/app/CustomLawnchair/`, `/system/app/CustomFcitx5/`, `/system/app/CustomFcitx5Hangul/`, `/system/app/CustomFirefox/`에 설치하며 추가 privileged 권한은 부여하지 않습니다. 압축·정렬 상태를 검사해 필요한 APK에만 Soong 검사 예외를 적용합니다. 기존 `apps-lock.json`과 동일한 입력으로 처음 빌드할 때는 import를 다시 할 필요가 없습니다. 기본 런처·입력기와 언어 선택은 사용자 설정으로 유지합니다.
 
 ## 구성 요점
 
@@ -179,7 +178,7 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 
 원격 화면은 `ssh -N -L 127.0.0.1:5561:127.0.0.1:5561 test-host`로 터널을 연 뒤 `adb connect 127.0.0.1:5561`, `scrcpy -s 127.0.0.1:5561`로 봅니다. 같은 호스트에서 접속하면 SSH 터널은 필요하지 않습니다.
 
-물리 키보드로 한글을 입력하려면 `scrcpy -s 127.0.0.1:5561 --keyboard=uhid`로 접속하고 입력기로 Gboard(한국어 두벌식)를 사용합니다. `WITH_UHID_INPUT`이 켜진 이미지는 컨테이너 안의 `custom_uhid_inputd`가 scrcpy UHID 키보드의 `/dev/input/eventN` 노드를 자동으로 만들고 지웁니다. 한/영 전환은 `Ctrl+Space`입니다. scrcpy가 전용 한/영 키를 보내지 않습니다. `remote_keyboard.py`는 이 서비스가 없는 이전 이미지용 수동 대안입니다. 원인과 시험 결과, 이전 KeliBoard의 제한은 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
+물리 키보드로 한글을 입력하려면 `scrcpy -s 127.0.0.1:5561 --keyboard=uhid`로 접속하고 입력기로 Fcitx5(Hangul)를 사용합니다. `WITH_UHID_INPUT`이 켜진 이미지는 컨테이너 안의 `custom_uhid_inputd`가 scrcpy UHID 키보드의 `/dev/input/eventN` 노드를 자동으로 만들고 지웁니다. 한/영 전환은 `Ctrl+Space`, 그리고 Fcitx5 단축키에 `Alt_R`을 추가한 경우 오른쪽 Alt입니다. `remote_keyboard.py`는 이 서비스가 없는 이전 이미지용 수동 대안입니다. 원인과 시험 결과, 이전 KeliBoard의 제한은 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
 
 ### microG 부정 시험 기록
 
