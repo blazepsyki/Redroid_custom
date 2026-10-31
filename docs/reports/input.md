@@ -26,6 +26,8 @@ Lawnchair는 압축·정렬 검사를 통과하므로 `skip_preprocessed_apk_che
 - 시작할 때 컨테이너의 `/dev/uhid`, `/dev/uinput`을 `ueventd.rc`와 같은 `uhid:uhid 0660`으로 맞춥니다. Docker는 호스트 장치 노드를 호스트 권한(`root:root 0600`) 그대로 복사하고, 컨테이너의 `ueventd`는 coldboot를 하지 않습니다. 이 상태에서는 scrcpy 서버(shell, uhid 그룹)가 `open failed: EACCES`로 실패합니다. 컨테이너의 tmpfs `/dev`만 바꾸며 호스트 노드는 바꾸지 않습니다.
 - 서비스 권한은 `MKNOD`, `SYS_PTRACE`(다른 프로세스의 `/proc/<pid>/fd` 확인), `DAC_READ_SEARCH`, `CHOWN`만 둡니다.
 
+같은 기능으로 `/vendor/usr/keylayout/scrcpy.kl`도 설치합니다. scrcpy UHID 키보드는 vendor·product ID가 0이므로 입력 프레임워크가 장치 이름(`scrcpy`)으로 키 레이아웃을 찾습니다. 이 파일은 `Generic.kl`과 같고 ESC(scancode 1)만 `BACK`으로 보냅니다. 앱은 `KEYCODE_ESCAPE` 대신 `KEYCODE_BACK`을 받으므로, scrcpy 키보드로는 ESC 자체를 입력할 수 없습니다. 다른 키보드는 계속 `Generic.kl`을 씁니다. `Generic.kcm`의 ESCAPE는 Android 15에서 `base: none`이고, `fallback BACK`으로 바꿔도 앱이 ESC를 처리하면 뒤로 가기가 되지 않으므로 키 레이아웃에서 바꿉니다.
+
 `remote_keyboard.py`는 이 서비스가 없는 이전 이미지에서만 쓰는 수동 대안으로 남깁니다.
 
 ## 실행 시험 (2026-10-28, Host `redroid-custom-arm64-test`)

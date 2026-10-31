@@ -228,7 +228,7 @@ def prepare_plan(phase):
         output[f'vendor/custom/{relative}'] = (ROOT / 'vendor/custom' / relative).read_bytes()
     if features['with_uhid_input']:
         # Soong parses every Android.bp, so the module is copied only when the feature is enabled.
-        for name in ('Android.bp', 'uhid_inputd.c', 'custom_uhid_inputd.rc'):
+        for name in ('Android.bp', 'uhid_inputd.c', 'custom_uhid_inputd.rc', 'scrcpy.kl'):
             output[f'vendor/custom/input/{name}'] = (ROOT / 'vendor/custom/input' / name).read_bytes()
     for name in ('MicrogCertificatePolicy.java', 'MicrogSignaturePolicy.java'):
         output[f'frameworks/base/services/core/java/com/android/server/pm/{name}'] = (

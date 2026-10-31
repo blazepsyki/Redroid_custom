@@ -11,8 +11,8 @@ if socket.gethostname() != expected_host:
     raise RuntimeError('접속한 호스트가 사전 점검 기록과 다릅니다.')
 if not package_id.isalnum():
     raise RuntimeError('패키지 ID가 잘못되었습니다.')
-# 다른 서비스와 같이 /data/<서비스>에 둡니다. 상위 폴더는 관리자가 한 번 만들고 실행 사용자에게 소유권을 줍니다.
-base = Path('/data/redroid-custom')
+# 다른 서비스와 같이 /nas/data/<서비스>에 둡니다. 상위 폴더는 관리자가 한 번 만들고 실행 사용자에게 소유권을 줍니다.
+base = Path('/nas/data/redroid-custom')
 if not base.is_dir() or base.is_symlink() or base.stat().st_uid != os.getuid():
     raise RuntimeError(f'{base}가 없거나 현재 사용자 소유가 아닙니다. 먼저 만들고 소유권을 지정해 주세요.')
 root = base / 'packages' / package_id

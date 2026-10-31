@@ -14,7 +14,7 @@ include vendor/custom/microg/microg.mk
 endif
 
 ifeq ($(WITH_UHID_INPUT),true)
-PRODUCT_PACKAGES += custom_uhid_inputd
+PRODUCT_PACKAGES += custom_uhid_inputd custom_scrcpy_keylayout
 endif
 
 ifeq ($(WITH_VALIDATION_TOOLS),true)

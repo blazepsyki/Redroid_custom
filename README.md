@@ -156,7 +156,7 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 | `arm64` | `redroid-custom-arm64-test` | 5561 | host(`/dev/dri/renderD128`), 메모리 상한 8GiB |
 | `guest`·`gpu`·`fixed` | `redroid-custom-test`·`-gpu-test`·`-fixed-test` | 5558·5559·5560 | 이전 단계 시험용 |
 
-실행 호스트의 파일은 다른 서비스와 같이 `/data/redroid-custom` 아래에 둡니다. 패키지는 `packages/<package_id>/`, Android `/data`는 `test-data/<실행 ID>/`, 잠금 파일은 `locks/`입니다. 처음 한 번은 관리자가 이 폴더를 만들고 실행 사용자에게 소유권을 줍니다(예: `sudo install -d -o $USER -g $USER /data/redroid-custom`). 폴더가 없거나 실행 사용자 소유가 아니면 `remote_prepare.py`가 중단합니다.
+실행 호스트의 파일은 다른 서비스와 같이 `/nas/data/redroid-custom` 아래에 둡니다. 패키지는 `packages/<package_id>/`, Android `/data`는 `test-data/<실행 ID>/`, 잠금 파일은 `locks/`입니다. 처음 한 번은 관리자가 이 폴더를 만들고 실행 사용자에게 소유권을 줍니다(예: `sudo install -d -o $USER -g $USER /nas/data/redroid-custom`). 폴더가 없거나 실행 사용자 소유가 아니면 `remote_prepare.py`가 중단합니다.
 
 1. `scripts/remote_preflight.py`의 결과(`build-logs/remote-preflight.json`)로 실행 호스트와 시험 경로를 확인합니다.
 2. `dist/transfer-test/redroid.docker.tar`에 패키지의 `redroid.oci.tar`를 복사합니다. 그다음 `scripts/prepare_remote_transfer.py --package-state build-logs/custom-package-state.json --directory dist/transfer-test`로 제어 파일 묶음과 해시를 만듭니다.
@@ -178,7 +178,7 @@ Binder를 지원하는 Linux 호스트에서 시험합니다. 이 프로젝트�
 
 원격 화면은 `ssh -N -L 127.0.0.1:5561:127.0.0.1:5561 test-host`로 터널을 연 뒤 `adb connect 127.0.0.1:5561`, `scrcpy -s 127.0.0.1:5561`로 봅니다. 같은 호스트에서 접속하면 SSH 터널은 필요하지 않습니다.
 
-물리 키보드로 한글을 입력하려면 `scrcpy -s 127.0.0.1:5561 --keyboard=uhid`로 접속하고 입력기로 Fcitx5(Hangul)를 사용합니다. `WITH_UHID_INPUT`이 켜진 이미지는 컨테이너 안의 `custom_uhid_inputd`가 scrcpy UHID 키보드의 `/dev/input/eventN` 노드를 자동으로 만들고 지웁니다. 한/영 전환은 `Ctrl+Space`, 그리고 Fcitx5 단축키에 `Alt_R`을 추가한 경우 오른쪽 Alt입니다. `remote_keyboard.py`는 이 서비스가 없는 이전 이미지용 수동 대안입니다. 원인과 시험 결과, 이전 KeliBoard의 제한은 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
+물리 키보드로 한글을 입력하려면 `scrcpy -s 127.0.0.1:5561 --keyboard=uhid`로 접속하고 입력기로 Fcitx5(Hangul)를 사용합니다. `WITH_UHID_INPUT`이 켜진 이미지는 컨테이너 안의 `custom_uhid_inputd`가 scrcpy UHID 키보드의 `/dev/input/eventN` 노드를 자동으로 만들고 지웁니다. 한/영 전환은 `Ctrl+Space`, 그리고 Fcitx5 단축키에 `Alt_R`을 추가한 경우 오른쪽 Alt입니다. scrcpy 키보드의 ESC는 뒤로 가기(`BACK`)로 동작합니다. `remote_keyboard.py`는 이 서비스가 없는 이전 이미지용 수동 대안입니다. 원인과 시험 결과, 이전 KeliBoard의 제한은 [scrcpy 입력 진단](docs/reports/input.md)에 있습니다.
 
 ### microG 부정 시험 기록
 

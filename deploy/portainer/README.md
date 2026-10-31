@@ -10,7 +10,7 @@
 | 이미지 | `${REDROID_IMAGE}` (기본 `redroid-custom:15.0.0-64only-261028`), `pull_policy: never` |
 | 재시작 | `unless-stopped` |
 | ADB | `${REDROID_ADB_PORT}` (기본 5555 → 컨테이너 5555 |
-| Android `/data` | `/data/redroid-custom/data` |
+| Android `/data` | `/nas/data/redroid-custom/data` |
 | GPU | `/dev/dri` bind, `androidboot.redroid_gpu_mode=host` |
 | 자원 상한 | CPU 1.5, 메모리 8GiB |
 | 로그 | json-file, 10MB × 3 |
@@ -19,10 +19,10 @@
 
 ## 호스트 사전 준비 (한 번)
 
-1. 서비스 폴더: `/data/redroid-custom/data`가 있어야 합니다. 없으면 관리자가 만들고 실행 사용자에게 소유권을 줍니다.
+1. 서비스 폴더: `/nas/data/redroid-custom/data`가 있어야 합니다. 없으면 관리자가 만들고 실행 사용자에게 소유권을 줍니다.
 
    ```bash
-   sudo install -d -o $USER -g $USER /data/redroid-custom /data/redroid-custom/data
+   sudo install -d -o $USER -g $USER /nas/data/redroid-custom /nas/data/redroid-custom/data
    ```
 
 2. 커널 모듈 자동 로드: Android는 Binder가 필요하고, scrcpy `--keyboard=uhid`는 UHID가 필요합니다. 2026-10-28 기준 Psyki-NAS는 `uhid`만 `/etc/modules-load.d/uhid.conf`에 등록되어 있고 `binder_linux`는 현재 로드만 된 상태입니다. 재부팅 뒤 자동 시작이 실패하지 않도록 등록합니다.
@@ -33,7 +33,7 @@
 
 ## 기존 수동 컨테이너에서 전환
 
-2026-10-28 현재 인스턴스는 수동으로 만든 `redroid-custom-arm64-test`이며 `/data`가 `/data/redroid-custom/test-data/20261028T025207233730Z`에 있습니다. 같은 데이터를 스택으로 넘기는 순서입니다.
+2026-10-28 현재 인스턴스는 수동으로 만든 `redroid-custom-arm64-test`이며 `/data`가 `/nas/data/redroid-custom/test-data/20261028T025207233730Z`에 있습니다. 같은 데이터를 스택으로 넘기는 순서입니다.
 
 1. 수동 컨테이너를 멈추고 지웁니다. `/data` 폴더는 지우지 않습니다.
 
@@ -45,8 +45,8 @@
 2. Android `/data`를 스택 경로로 옮깁니다. 같은 파일시스템 안의 이름 변경이라 소유자·권한이 유지됩니다.
 
    ```bash
-   mv /data/redroid-custom/test-data/20261028T025207233730Z /data/redroid-custom/data
-   rmdir /data/redroid-custom/test-data   # 비어 있을 때만 지워집니다
+   mv /nas/data/redroid-custom/test-data/20261028T025207233730Z /nas/data/redroid-custom/data
+   rmdir /nas/data/redroid-custom/test-data   # 비어 있을 때만 지워집니다
    ```
 
 3. Portainer → Stacks → Add stack에서 이름을 `redroid-custom`으로 하고 `docker-compose.yml` 내용을 붙여 넣습니다. Environment variables에는 `stack.env.example`의 값을 필요한 만큼 넣습니다.

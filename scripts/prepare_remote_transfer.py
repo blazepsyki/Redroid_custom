@@ -21,9 +21,9 @@ destination = ROOT / args.directory
 require(destination.resolve().is_relative_to((ROOT / 'dist').resolve()), '전송 산출물은 dist 아래에 저장해야 합니다.')
 docker_archive = destination / 'redroid.docker.tar'
 require(docker_archive.is_file(), 'docker save로 만든 호환 archive가 필요합니다.')
-# 원격 호스트의 서비스 폴더입니다. 다른 서비스의 /data/<서비스>와 같은 위치를 사용합니다.
+# 원격 호스트의 서비스 폴더입니다. 다른 서비스의 /nas/data/<서비스>와 같은 위치를 사용합니다.
 # 패키지는 packages/<ID>, Android /data와 잠금은 서비스 폴더 바로 아래(test-data/, locks/)에 둡니다.
-remote_base = Path('/data/redroid-custom')
+remote_base = Path('/nas/data/redroid-custom')
 remote_root = remote_base / 'packages' / package['package_id']
 files = {}
 for name in ('phase0.py', 'runtime.py', 'common.sh', '08-deploy-test.sh',

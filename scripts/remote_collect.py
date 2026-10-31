@@ -12,7 +12,7 @@ def run(args, timeout=20):
 
 
 root = Path(sys.argv[1]).resolve()
-if not root.is_relative_to(Path('/data/redroid-custom/packages')):
+if not root.is_relative_to(Path('/nas/data/redroid-custom/packages')):
     raise RuntimeError('시험 경로가 예상과 다릅니다.')
 profile = sys.argv[2] if len(sys.argv) > 2 else 'guest'
 if profile not in ('guest', 'gpu', 'fixed', 'arm64'):

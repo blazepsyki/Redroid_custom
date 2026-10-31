@@ -23,7 +23,7 @@ def digest(path):
 
 require(len(sys.argv) == 4, '시험 경로와 두 archive의 예상 SHA-256이 필요합니다.')
 root = Path(sys.argv[1]).resolve()
-require(root.is_relative_to(Path('/data/redroid-custom/packages')), '원격 시험 경로가 예상과 다릅니다.')
+require(root.is_relative_to(Path('/nas/data/redroid-custom/packages')), '원격 시험 경로가 예상과 다릅니다.')
 owner = json.loads((root / 'remote-test-owner.json').read_text())
 require(owner['uid'] == os.getuid() and owner['package_id'] == root.name, '시험 디렉터리 소유 정보가 다릅니다.')
 for name, expected in zip(('redroid.docker.tar', 'control.tar.gz'), sys.argv[2:]):

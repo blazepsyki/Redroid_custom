@@ -11,3 +11,11 @@ cc_binary {
     shared_libs: ["liblog"],
     init_rc: ["custom_uhid_inputd.rc"],
 }
+
+// ESC on the scrcpy UHID keyboard is sent as BACK. The framework finds this file by the device name.
+prebuilt_usr_keylayout {
+    name: "custom_scrcpy_keylayout",
+    vendor: true,
+    src: "scrcpy.kl",
+    filename: "scrcpy.kl",
+}

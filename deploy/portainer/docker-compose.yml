@@ -21,7 +21,7 @@ services:
 
     volumes:
       # Android /data (계정, 앱, 설정). 이 폴더를 지우면 모든 앱 데이터가 사라집니다.
-      - "/data/redroid-custom/data:/data"
+      - "/nas/data/redroid-custom/data:/data"
       # Intel GPU host 렌더링
       - "/dev/dri:/dev/dri"
 

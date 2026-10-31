@@ -113,6 +113,9 @@ def run(args):
                          'system/bin/arm64/linker64']
                 if mode != 'custom-modules':
                     names.append('system/lib64/arm64/libc.so')
+            if custom_state and custom_state['features'].get('with_uhid_input'):
+                # 입력 프레임워크는 장치 이름과 같은 파일 이름만 찾으므로 설치 이름까지 확인합니다.
+                names = [*names, 'vendor/usr/keylayout/scrcpy.kl']
             if custom_state and custom_state['features']['with_microg']:
                 names = list(names)
                 for app in json.loads((ROOT / 'config/microg-apk-lock.json').read_text(encoding='utf-8'))['apps']:
