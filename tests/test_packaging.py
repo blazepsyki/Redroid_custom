@@ -8,6 +8,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
@@ -135,9 +136,22 @@ class ImageTagTests(unittest.TestCase):
     build = dict(official_patch_record_sha256='a' * 64)
     custom = dict(plan_sha256='b' * 64)
 
-    def test_default_tag_uses_custom_plan_hash(self):
-        with patch.dict('os.environ', {'REDROID_IMAGE_TAG': ''}):
-            self.assertEqual(package_image.image_tag(self.build, self.custom), 'redroid-local:a15-r36-custom-' + 'b' * 12)
+    def test_default_tag_uses_korean_packaging_date(self):
+        instant = datetime(2026, 10, 31, 15, 30, tzinfo=timezone.utc)
+        with patch.dict('os.environ', {'REDROID_IMAGE_TAG': ''}), patch.object(package_image, 'datetime') as clock:
+            clock.now.side_effect = lambda zone: instant.astimezone(zone)
+            self.assertEqual(package_image.image_tag(self.build, self.custom),
+                             'gth1919/psyki:redroid-custom-15.0.0-64only-261101')
+
+    def test_configured_date_template_changes_with_packaging_date(self):
+        template = 'gth1919/psyki:redroid-custom-15.0.0-64only-{date}'
+        for day in (1, 2):
+            instant = datetime(2026, 11, day, tzinfo=timezone.utc)
+            with self.subTest(day=day), patch.dict('os.environ', REDROID_IMAGE_TAG=template), \
+                    patch.object(package_image, 'datetime') as clock:
+                clock.now.side_effect = lambda zone: instant.astimezone(zone)
+                self.assertEqual(package_image.image_tag(self.build, self.custom),
+                                 f'gth1919/psyki:redroid-custom-15.0.0-64only-26110{day}')
 
     def test_configured_tag_is_used_without_hash(self):
         for tag in ('myname/redroid:a15-custom', 'registry.local:5000/team/redroid:latest'):
@@ -152,7 +166,7 @@ class ImageTagTests(unittest.TestCase):
                 self.assertEqual(package_image.full_reference(tag), expected)
 
     def test_invalid_configured_tag_is_rejected(self):
-        for tag in ('MyName/redroid:a15', 'redroid', 'redroid:', 'bad name:tag'):
+        for tag in ('MyName/redroid:a15', 'redroid', 'redroid:', 'bad name:tag', 'redroid:{unknown}'):
             with self.subTest(tag=tag), patch.dict('os.environ', {'REDROID_IMAGE_TAG': tag}):
                 with self.assertRaises(RuntimeError):
                     package_image.image_tag(self.build, self.custom)

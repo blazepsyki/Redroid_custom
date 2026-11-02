@@ -11,7 +11,7 @@ import stat
 import subprocess
 import sys
 import tarfile
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from phase0 import Phase0, PhaseError, ROOT, command, require, sha256, write_json
@@ -35,13 +35,13 @@ def full_reference(tag):
 
 
 def image_tag(build, custom_state):
-    """custom 이미지는 REDROID_IMAGE_TAG가 있으면 그 값을, 없으면 custom plan 해시 태그를 사용합니다."""
+    """Resolve custom image tags with the packaging date in Korea (YYMMDD)."""
     if custom_state:
-        configured = os.environ.get('REDROID_IMAGE_TAG', '').strip()
-        if configured:
-            require(IMAGE_REFERENCE.fullmatch(configured), f'REDROID_IMAGE_TAG는 name:tag 형식이어야 합니다: {configured}')
-            return configured
-        return f'redroid-local:a15-r36-custom-{custom_state["plan_sha256"][:12]}'
+        configured = os.environ.get('REDROID_IMAGE_TAG', '').strip() or 'gth1919/psyki:redroid-custom-15.0.0-64only-{date}'
+        date = datetime.now(timezone(timedelta(hours=9))).strftime('%y%m%d')
+        tag = configured.replace('{date}', date)
+        require(IMAGE_REFERENCE.fullmatch(tag), f'REDROID_IMAGE_TAG는 name:tag 형식이어야 합니다: {tag}')
+        return tag
     return f'redroid-local:a15-r36-vanilla-{build["official_patch_record_sha256"][:12]}'
 
 
